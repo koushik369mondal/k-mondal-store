@@ -19,11 +19,13 @@ const Cart = ({ onCheckout }) => {
             <div className="space-y-4">
                 {cart.map(item => (
                     <div key={item._id} className="flex items-center gap-4 border-b pb-4">
-                        <img
-                            src={item.image.url}
-                            alt={item.title}
-                            className="w-20 h-20 object-cover rounded"
-                        />
+                        <div className="w-20 h-20 bg-gray-100 rounded flex items-center justify-center">
+                            <img
+                                src={item.image.url}
+                                alt={item.title}
+                                className="w-full h-full object-contain rounded"
+                            />
+                        </div>
                         <div className="flex-grow">
                             <h3 className="font-semibold">{item.title}</h3>
                             <p className="text-gray-600">₹{item.price}</p>

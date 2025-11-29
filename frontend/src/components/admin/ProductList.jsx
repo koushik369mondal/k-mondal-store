@@ -53,7 +53,9 @@ const ProductList = () => {
                         {products.map(product => (
                             <tr key={product._id} className="border-b">
                                 <td className="px-4 py-2">
-                                    <img src={product.image.url} alt={product.title} className="w-16 h-16 object-cover rounded" />
+                                    <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
+                                        <img src={product.image.url} alt={product.title} className="w-full h-full object-contain rounded" />
+                                    </div>
                                 </td>
                                 <td className="px-4 py-2">{product.title}</td>
                                 <td className="px-4 py-2">₹{product.price}</td>
