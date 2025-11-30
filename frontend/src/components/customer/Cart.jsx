@@ -14,7 +14,7 @@ const Cart = ({ onCheckout }) => {
 
     return (
         <div className="card max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6">Shopping Cart</h2>
+            <h2 className="text-2xl font-bold mb-6 text-dark">Shopping Cart</h2>
 
             <div className="space-y-4">
                 {cart.map(item => (
@@ -27,30 +27,30 @@ const Cart = ({ onCheckout }) => {
                             />
                         </div>
                         <div className="flex-grow">
-                            <h3 className="font-semibold">{item.title}</h3>
+                            <h3 className="font-semibold text-dark">{item.title}</h3>
                             <p className="text-gray-600">₹{item.price}</p>
                         </div>
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                                className="px-3 py-1 bg-gray-200 rounded"
+                                className="px-3 py-1 bg-light-green text-white rounded hover:bg-primary transition-colors"
                             >
                                 -
                             </button>
-                            <span className="px-4">{item.quantity}</span>
+                            <span className="px-4 text-dark font-semibold">{item.quantity}</span>
                             <button
                                 onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                                className="px-3 py-1 bg-gray-200 rounded"
+                                className="px-3 py-1 bg-light-green text-white rounded hover:bg-primary transition-colors"
                             >
                                 +
                             </button>
                         </div>
-                        <div className="text-lg font-semibold">
+                        <div className="text-lg font-semibold text-primary">
                             ₹{item.price * item.quantity}
                         </div>
                         <button
                             onClick={() => removeFromCart(item._id)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-600 hover:text-red-800 font-semibold transition-colors"
                         >
                             Remove
                         </button>
@@ -60,8 +60,8 @@ const Cart = ({ onCheckout }) => {
 
             <div className="mt-6 pt-6 border-t">
                 <div className="flex justify-between items-center text-xl font-bold mb-4">
-                    <span>Total:</span>
-                    <span>₹{getTotal()}</span>
+                    <span className="text-dark">Total:</span>
+                    <span className="text-primary">₹{getTotal()}</span>
                 </div>
                 <button onClick={onCheckout} className="btn-primary w-full">
                     Proceed to Checkout

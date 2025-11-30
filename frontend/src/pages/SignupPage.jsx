@@ -49,11 +49,11 @@ const SignupPage = () => {
     return (
         <div className="container mx-auto px-4 py-16">
             <div className="card max-w-md mx-auto">
-                <h2 className="text-3xl font-bold text-center mb-8">Create Account</h2>
+                <h2 className="text-3xl font-bold text-center mb-8 text-dark">Create Account</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">Full Name</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Full Name</label>
                         <input
                             type="text"
                             name="name"
@@ -66,7 +66,7 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">Email</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Email</label>
                         <input
                             type="email"
                             name="email"
@@ -79,7 +79,7 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">Password</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Password</label>
                         <input
                             type="password"
                             name="password"
@@ -93,7 +93,7 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">Confirm Password</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Confirm Password</label>
                         <input
                             type="password"
                             name="confirmPassword"
@@ -112,7 +112,7 @@ const SignupPage = () => {
 
                 <p className="text-center mt-6 text-gray-600">
                     Already have an account?{' '}
-                    <Link to="/login" className="text-blue-600 hover:text-blue-800 font-semibold">
+                    <Link to="/login" className="text-primary hover:text-light-green font-semibold transition-colors">
                         Login here
                     </Link>
                 </p>

@@ -36,11 +36,11 @@ const Checkout = ({ onSuccess }) => {
 
     return (
         <div className="card max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6">Checkout</h2>
+            <h2 className="text-2xl font-bold mb-6 text-dark">Checkout</h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium mb-2">Full Name</label>
+                    <label className="block text-sm font-medium mb-2 text-dark">Full Name</label>
                     <input
                         type="text"
                         required
@@ -51,7 +51,7 @@ const Checkout = ({ onSuccess }) => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Phone Number</label>
+                    <label className="block text-sm font-medium mb-2 text-dark">Phone Number</label>
                     <input
                         type="tel"
                         required
@@ -62,7 +62,7 @@ const Checkout = ({ onSuccess }) => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Delivery Address</label>
+                    <label className="block text-sm font-medium mb-2 text-dark">Delivery Address</label>
                     <textarea
                         required
                         rows="3"
@@ -72,10 +72,10 @@ const Checkout = ({ onSuccess }) => {
                     />
                 </div>
 
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="bg-neutral-white p-4 rounded-lg border-2 border-primary">
                     <div className="flex justify-between font-semibold text-lg">
-                        <span>Total Amount:</span>
-                        <span>₹{getTotal()}</span>
+                        <span className="text-dark">Total Amount:</span>
+                        <span className="text-primary">₹{getTotal()}</span>
                     </div>
                 </div>
 

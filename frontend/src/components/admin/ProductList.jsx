@@ -35,18 +35,18 @@ const ProductList = () => {
 
     return (
         <div className="card">
-            <h2 className="text-2xl font-bold mb-6">Product List</h2>
+            <h2 className="text-2xl font-bold mb-6 text-dark">Product List</h2>
 
             <div className="overflow-x-auto">
                 <table className="w-full">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-neutral-white">
                         <tr>
-                            <th className="px-4 py-2 text-left">Image</th>
-                            <th className="px-4 py-2 text-left">Title</th>
-                            <th className="px-4 py-2 text-left">Price</th>
-                            <th className="px-4 py-2 text-left">Stock</th>
-                            <th className="px-4 py-2 text-left">Category</th>
-                            <th className="px-4 py-2 text-left">Actions</th>
+                            <th className="px-4 py-2 text-left text-dark">Image</th>
+                            <th className="px-4 py-2 text-left text-dark">Title</th>
+                            <th className="px-4 py-2 text-left text-dark">Price</th>
+                            <th className="px-4 py-2 text-left text-dark">Stock</th>
+                            <th className="px-4 py-2 text-left text-dark">Category</th>
+                            <th className="px-4 py-2 text-left text-dark">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,14 +57,14 @@ const ProductList = () => {
                                         <img src={product.image.url} alt={product.title} className="w-full h-full object-contain rounded" />
                                     </div>
                                 </td>
-                                <td className="px-4 py-2">{product.title}</td>
-                                <td className="px-4 py-2">₹{product.price}</td>
-                                <td className="px-4 py-2">{product.stock}</td>
-                                <td className="px-4 py-2">{product.category}</td>
+                                <td className="px-4 py-2 text-dark">{product.title}</td>
+                                <td className="px-4 py-2 text-primary font-semibold">₹{product.price}</td>
+                                <td className="px-4 py-2 text-dark">{product.stock}</td>
+                                <td className="px-4 py-2 text-dark">{product.category}</td>
                                 <td className="px-4 py-2">
                                     <button
                                         onClick={() => handleDelete(product._id)}
-                                        className="text-red-500 hover:text-red-700"
+                                        className="text-red-600 hover:text-red-800 font-semibold transition-colors"
                                     >
                                         Delete
                                     </button>

@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
                     className="w-full h-full object-contain"
                 />
             </div>
-            <h3 className="text-xl font-semibold mb-2">{product.title}</h3>
+            <h3 className="text-xl font-semibold mb-2 text-dark">{product.title}</h3>
             <p className="text-gray-600 mb-3 line-clamp-2">{product.description}</p>
             <div className="flex justify-between items-center">
                 <span className="text-2xl font-bold text-primary">₹{product.price}</span>
@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
                 </button>
             </div>
             {product.stock < 10 && product.stock > 0 && (
-                <p className="text-orange-500 text-sm mt-2">Only {product.stock} left!</p>
+                <p className="text-secondary text-sm mt-2 font-semibold">Only {product.stock} left!</p>
             )}
         </div>
     );

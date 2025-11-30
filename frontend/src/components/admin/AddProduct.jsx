@@ -42,11 +42,11 @@ const AddProduct = ({ onSuccess }) => {
 
     return (
         <div className="card">
-            <h2 className="text-2xl font-bold mb-6">Add New Product</h2>
+            <h2 className="text-2xl font-bold mb-6 text-dark">Add New Product</h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium mb-2">Product Title</label>
+                    <label className="block text-sm font-medium mb-2 text-dark">Product Title</label>
                     <input
                         type="text"
                         required
@@ -57,7 +57,7 @@ const AddProduct = ({ onSuccess }) => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Description</label>
+                    <label className="block text-sm font-medium mb-2 text-dark">Description</label>
                     <textarea
                         required
                         rows="3"
@@ -69,7 +69,7 @@ const AddProduct = ({ onSuccess }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">Price (₹)</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Price (₹)</label>
                         <input
                             type="number"
                             required
@@ -82,7 +82,7 @@ const AddProduct = ({ onSuccess }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">Category</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Category</label>
                         <input
                             type="text"
                             required
@@ -93,7 +93,7 @@ const AddProduct = ({ onSuccess }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">Stock</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Stock</label>
                         <input
                             type="number"
                             required
@@ -106,7 +106,7 @@ const AddProduct = ({ onSuccess }) => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Product Image</label>
+                    <label className="block text-sm font-medium mb-2 text-dark">Product Image</label>
                     <input
                         type="file"
                         required

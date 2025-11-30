@@ -31,11 +31,11 @@ const LoginPage = () => {
     return (
         <div className="container mx-auto px-4 py-16">
             <div className="card max-w-md mx-auto">
-                <h2 className="text-3xl font-bold text-center mb-8">Login</h2>
+                <h2 className="text-3xl font-bold text-center mb-8 text-dark">Login</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">Email</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Email</label>
                         <input
                             type="email"
                             required
@@ -46,7 +46,7 @@ const LoginPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">Password</label>
+                        <label className="block text-sm font-medium mb-2 text-dark">Password</label>
                         <input
                             type="password"
                             required
@@ -63,7 +63,7 @@ const LoginPage = () => {
 
                 <p className="text-center mt-6 text-gray-600">
                     Don't have an account?{' '}
-                    <Link to="/signup" className="text-blue-600 hover:text-blue-800 font-semibold">
+                    <Link to="/signup" className="text-primary hover:text-light-green font-semibold transition-colors">
                         Sign up here
                     </Link>
                 </p>
