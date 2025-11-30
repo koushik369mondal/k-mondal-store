@@ -33,14 +33,14 @@ const Cart = ({ onCheckout }) => {
                         <div className="flex items-center gap-2 sm:gap-2">
                             <button
                                 onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                                className="px-2 sm:px-3 py-1 bg-light-green text-white rounded hover:bg-primary transition-colors text-sm"
+                                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-light-green text-white rounded hover:bg-primary transition-colors text-lg font-bold"
                             >
-                                -
+                                −
                             </button>
                             <span className="px-2 sm:px-4 text-dark font-semibold min-w-[2rem] text-center">{item.quantity}</span>
                             <button
                                 onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                                className="px-2 sm:px-3 py-1 bg-light-green text-white rounded hover:bg-primary transition-colors text-sm"
+                                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-light-green text-white rounded hover:bg-primary transition-colors text-lg font-bold"
                             >
                                 +
                             </button>
