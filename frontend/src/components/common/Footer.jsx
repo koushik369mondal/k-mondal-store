@@ -8,7 +8,7 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-bold mb-2">K Mondal Store</h3>
                         <p className="text-gray-300 text-sm">
-                            Your trusted local kirana store in Banarhat, Jalpaiguri
+                            Your trusted local kirana store in, Santimore, Banarhat, Jalpaiguri
                         </p>
                     </div>
 
@@ -38,7 +38,7 @@ const Footer = () => {
                         <p className="text-gray-300 text-sm">Sunday: 6:00 AM - 9:00 AM</p>
                         <p className="text-gray-300 text-sm">Sunday: 3:00 PM - 9:00 PM</p>
                     </div>
-                    
+
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-gray-700 text-center">

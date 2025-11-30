@@ -44,16 +44,14 @@ const Navbar = () => {
                             <Link to="/admin" className="hover:text-soft-gold transition-colors">Admin</Link>
                         )}
 
-                        <div className="relative">
-                            <button className="hover:opacity-80 transition-opacity flex items-center gap-1">
-                                <img src={groceryIcon} alt="Cart" className="w-7 h-7" />
-                                {cart.length > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                        {cart.length}
-                                    </span>
-                                )}
-                            </button>
-                        </div>
+                        <Link to="/cart" className="relative hover:opacity-80 transition-opacity flex items-center gap-1">
+                            <img src={groceryIcon} alt="Cart" className="w-7 h-7" />
+                            {cart.length > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {cart.length}
+                                </span>
+                            )}
+                        </Link>
 
                         {user ? (
                             <div className="flex items-center gap-4">
@@ -80,10 +78,10 @@ const Navbar = () => {
                             <Link to="/admin" className="hover:text-soft-gold transition-colors" onClick={closeMenu}>Admin</Link>
                         )}
 
-                        <button className="hover:opacity-80 transition-opacity text-left flex items-center gap-2" onClick={closeMenu}>
+                        <Link to="/cart" className="hover:opacity-80 transition-opacity text-left flex items-center gap-2" onClick={closeMenu}>
                             <img src={groceryIcon} alt="Cart" className="w-6 h-6" />
                             Cart ({cart.length})
-                        </button>
+                        </Link>
 
                         {user ? (
                             <>

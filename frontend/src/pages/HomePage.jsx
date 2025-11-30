@@ -1,18 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ProductGrid from '../components/customer/ProductGrid';
-import Cart from '../components/customer/Cart';
-import Checkout from '../components/customer/Checkout';
 
 const HomePage = () => {
-    const [showCheckout, setShowCheckout] = useState(false);
-    const [showCart, setShowCart] = useState(false);
-
-    const handleCheckoutSuccess = (order) => {
-        alert(`Order placed successfully! Order ID: ${order._id}`);
-        setShowCheckout(false);
-        setShowCart(false);
-    };
-
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="mb-8 text-center">
@@ -20,23 +9,11 @@ const HomePage = () => {
                     Welcome to K Mondal Store
                 </h1>
                 <p className="text-lg text-gray-600">
-                    Your trusted local kirana store in Banarhat
+                    Your trusted local kirana store in Santimore, Banarhat
                 </p>
-                <button
-                    onClick={() => setShowCart(!showCart)}
-                    className="btn-primary mt-4"
-                >
-                    {showCart ? 'Browse Products' : 'View Cart'}
-                </button>
             </div>
 
-            {showCheckout ? (
-                <Checkout onSuccess={handleCheckoutSuccess} />
-            ) : showCart ? (
-                <Cart onCheckout={() => setShowCheckout(true)} />
-            ) : (
-                <ProductGrid />
-            )}
+            <ProductGrid />
         </div>
     );
 };
