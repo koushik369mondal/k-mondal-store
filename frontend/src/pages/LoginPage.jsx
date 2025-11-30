@@ -14,8 +14,13 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            await login(email, password);
-            navigate('/admin');
+            const response = await login(email, password);
+            // Redirect based on user role
+            if (response.user.role === 'admin') {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
         } catch (error) {
             alert('Login failed: ' + error.response?.data?.message);
         } finally {
@@ -26,7 +31,7 @@ const LoginPage = () => {
     return (
         <div className="container mx-auto px-4 py-16">
             <div className="card max-w-md mx-auto">
-                <h2 className="text-3xl font-bold text-center mb-8">Admin Login</h2>
+                <h2 className="text-3xl font-bold text-center mb-8">Login</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
