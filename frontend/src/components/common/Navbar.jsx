@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
+import groceryIcon from '../../public/images/grocery-store.png';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
@@ -44,8 +45,13 @@ const Navbar = () => {
                         )}
 
                         <div className="relative">
-                            <button className="hover:text-soft-gold transition-colors">
-                                Cart ({cart.length})
+                            <button className="hover:opacity-80 transition-opacity flex items-center gap-1">
+                                <img src={groceryIcon} alt="Cart" className="w-7 h-7" />
+                                {cart.length > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                        {cart.length}
+                                    </span>
+                                )}
                             </button>
                         </div>
 
@@ -57,8 +63,8 @@ const Navbar = () => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex items-center gap-4">
-                                <Link to="/login" className="hover:text-soft-gold transition-colors">Login</Link>
+                            <div className="flex items-center gap-3">
+                                <Link to="/login" className="bg-secondary hover:bg-soft-gold px-4 py-2 rounded-lg transition-colors">Login</Link>
                                 <Link to="/signup" className="bg-secondary hover:bg-soft-gold px-4 py-2 rounded-lg transition-colors">Sign Up</Link>
                             </div>
                         )}
@@ -74,7 +80,8 @@ const Navbar = () => {
                             <Link to="/admin" className="hover:text-soft-gold transition-colors" onClick={closeMenu}>Admin</Link>
                         )}
 
-                        <button className="hover:text-soft-gold transition-colors text-left" onClick={closeMenu}>
+                        <button className="hover:opacity-80 transition-opacity text-left flex items-center gap-2" onClick={closeMenu}>
+                            <img src={groceryIcon} alt="Cart" className="w-6 h-6" />
                             Cart ({cart.length})
                         </button>
 
@@ -93,8 +100,8 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="hover:text-soft-gold transition-colors" onClick={closeMenu}>Login</Link>
-                                <Link to="/signup" className="hover:text-soft-gold transition-colors" onClick={closeMenu}>Sign Up</Link>
+                                <Link to="/login" className="bg-secondary hover:bg-soft-gold px-4 py-2 rounded-lg transition-colors text-center" onClick={closeMenu}>Login</Link>
+                                <Link to="/signup" className="bg-secondary hover:bg-soft-gold px-4 py-2 rounded-lg transition-colors text-center" onClick={closeMenu}>Sign Up</Link>
                             </>
                         )}
                     </div>
