@@ -19,13 +19,13 @@ const Checkout = ({ onSuccess }) => {
             const orderData = {
                 ...formData,
                 items: cart.map(item => ({
-                    product: item._id,
+                    product: item.product?._id || item._id, // Handle both MongoDB and legacy formats
                     quantity: item.quantity
                 }))
             };
 
             const { data } = await api.post('/orders', orderData);
-            clearCart();
+            await clearCart(); // Wait for cart to be cleared in MongoDB
             onSuccess(data.order);
         } catch (error) {
             alert('Error placing order: ' + error.response?.data?.message);
