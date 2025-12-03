@@ -31,12 +31,8 @@ const Footer = () => {
 
                     <div>
                         <h3 className="text-xl font-bold mb-4 text-secondary">Business Hours</h3>
-                        {/* Monday to Saturday */}
-                        <p className="text-cream/80 text-sm mb-1">Mon - Sat: 6:00 AM - 11:45 AM</p>
-                        <p className="text-cream/80 text-sm mb-2">Mon - Sat: 3:00 PM - 9:00 PM</p>
-                        {/* Sunday special hours */}
-                        <p className="text-cream/80 text-sm mb-1">Sunday: 6:00 AM - 9:00 AM</p>
-                        <p className="text-cream/80 text-sm">Sunday: 3:00 PM - 9:00 PM</p>
+                        <p className="text-cream/80 text-sm mb-2">Mon - Sat: 6:00 AM - 11:45 AM & 3:00 PM - 9:00 PM</p>
+                        <p className="text-cream/80 text-sm">Sunday: 6:00 AM - 9:00 AM & 3:00 PM - 9:00 PM</p>
                     </div>
 
                 </div>
