@@ -1,10 +1,24 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
+// Get user orders (for logged-in users)
+export const getUserOrders = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const orders = await Order.find({ user: userId })
+            .populate('items.product')
+            .sort({ createdAt: -1 });
+        res.json({ success: true, orders });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 // Create new order
 export const createOrder = async (req, res) => {
     try {
         const { customerName, customerPhone, customerAddress, items } = req.body;
+        const userId = req.user?._id; // Get userId if user is authenticated
 
         if (!items || items.length === 0) {
             return res.status(400).json({ success: false, message: 'No items in cart' });
@@ -29,13 +43,20 @@ export const createOrder = async (req, res) => {
             totalAmount += product.price * item.quantity;
         }
 
-        const order = await Order.create({
+        const orderData = {
             customerName,
             customerPhone,
             customerAddress,
             items: orderItems,
             totalAmount
-        });
+        };
+
+        // Add userId if user is authenticated
+        if (userId) {
+            orderData.user = userId;
+        }
+
+        const order = await Order.create(orderData);
 
         res.status(201).json({ success: true, order });
     } catch (error) {
@@ -60,6 +81,12 @@ export const getOrderById = async (req, res) => {
         if (!order) {
             return res.status(404).json({ success: false, message: 'Order not found' });
         }
+
+        // Ensure user can only view their own orders (unless admin)
+        if (req.user.role !== 'admin' && order.user && order.user.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ success: false, message: 'Not authorized to view this order' });
+        }
+
         res.json({ success: true, order });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

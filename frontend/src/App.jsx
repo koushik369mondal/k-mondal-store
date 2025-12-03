@@ -7,6 +7,10 @@ import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import CartPage from './pages/CartPage';
+import MyOrdersPage from './pages/MyOrdersPage';
+import MyProfilePage from './pages/MyProfilePage';
+import SavedAddressesPage from './pages/SavedAddressesPage';
+import SupportPage from './pages/SupportPage';
 
 function App() {
     return (
@@ -20,6 +24,10 @@ function App() {
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/cart" element={<CartPage />} />
+                        <Route path="/orders" element={<MyOrdersPage />} />
+                        <Route path="/profile" element={<MyProfilePage />} />
+                        <Route path="/addresses" element={<SavedAddressesPage />} />
+                        <Route path="/support" element={<SupportPage />} />
                     </Routes>
                 </main>
                 <Footer />
