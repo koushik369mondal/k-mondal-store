@@ -41,35 +41,37 @@ const AddProduct = ({ onSuccess }) => {
     };
 
     return (
-        <div className="card">
-            <h2 className="text-2xl font-bold mb-6 text-dark">Add New Product</h2>
+        <div className="card max-w-4xl mx-auto border border-cream-dark">
+            <h2 className="text-3xl font-bold mb-8 text-charcoal border-b-2 border-secondary pb-4">Add New Product</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-dark">Product Title</label>
+                    <label className="block text-base font-semibold mb-2 text-charcoal">Product Title</label>
                     <input
                         type="text"
                         required
                         className="input-field"
                         value={formData.title}
                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        placeholder="Enter product name"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-dark">Description</label>
+                    <label className="block text-base font-semibold mb-2 text-charcoal">Description</label>
                     <textarea
                         required
-                        rows="3"
+                        rows="4"
                         className="input-field"
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        placeholder="Enter product description"
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Price (₹)</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Price (₹)</label>
                         <input
                             type="number"
                             required
@@ -78,22 +80,24 @@ const AddProduct = ({ onSuccess }) => {
                             className="input-field"
                             value={formData.price}
                             onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                            placeholder="0.00"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Category</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Category</label>
                         <input
                             type="text"
                             required
                             className="input-field"
                             value={formData.category}
                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            placeholder="e.g., Groceries"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Stock</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Stock</label>
                         <input
                             type="number"
                             required
@@ -101,22 +105,23 @@ const AddProduct = ({ onSuccess }) => {
                             className="input-field"
                             value={formData.stock}
                             onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                            placeholder="0"
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-dark">Product Image</label>
+                    <label className="block text-base font-semibold mb-2 text-charcoal">Product Image</label>
                     <input
                         type="file"
                         required
                         accept="image/*"
-                        className="input-field"
+                        className="input-field file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-light file:cursor-pointer"
                         onChange={(e) => setImage(e.target.files[0])}
                     />
                 </div>
 
-                <button type="submit" disabled={loading} className="btn-primary w-full">
+                <button type="submit" disabled={loading} className="btn-primary w-full text-lg py-4">
                     {loading ? 'Adding Product...' : 'Add Product'}
                 </button>
             </form>

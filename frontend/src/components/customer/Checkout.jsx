@@ -35,51 +35,54 @@ const Checkout = ({ onSuccess }) => {
     };
 
     return (
-        <div className="card max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-dark">Checkout</h2>
+        <div className="card max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-charcoal border-b-2 border-secondary pb-4">Checkout</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-dark">Full Name</label>
+                    <label className="block text-base font-semibold mb-2 text-charcoal">Full Name</label>
                     <input
                         type="text"
                         required
                         className="input-field"
                         value={formData.customerName}
                         onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
+                        placeholder="Enter your full name"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-dark">Phone Number</label>
+                    <label className="block text-base font-semibold mb-2 text-charcoal">Phone Number</label>
                     <input
                         type="tel"
                         required
                         className="input-field"
                         value={formData.customerPhone}
                         onChange={(e) => setFormData({ ...formData, customerPhone: e.target.value })}
+                        placeholder="Enter your phone number"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-dark">Delivery Address</label>
+                    <label className="block text-base font-semibold mb-2 text-charcoal">Delivery Address</label>
                     <textarea
                         required
-                        rows="3"
+                        rows="4"
                         className="input-field"
                         value={formData.customerAddress}
                         onChange={(e) => setFormData({ ...formData, customerAddress: e.target.value })}
+                        placeholder="Enter your complete delivery address"
                     />
                 </div>
 
-                <div className="bg-neutral-white p-4 rounded-lg border-2 border-primary">
-                    <div className="flex justify-between font-semibold text-lg">
-                        <span className="text-dark">Total Amount:</span>
-                        <span className="text-primary">₹{getTotal()}</span>
+                <div className="bg-cream border-2 border-secondary p-6 rounded-2xl shadow-premium">
+                    <div className="flex justify-between font-bold text-xl">
+                        <span className="text-charcoal">Total Amount:</span>
+                        <span className="text-secondary text-2xl">₹{getTotal()}</span>
                     </div>
                 </div>
 
-                <button type="submit" disabled={loading} className="btn-primary w-full">
+                <button type="submit" disabled={loading} className="btn-secondary w-full text-lg py-4">
                     {loading ? 'Processing...' : 'Place Order'}
                 </button>
             </form>

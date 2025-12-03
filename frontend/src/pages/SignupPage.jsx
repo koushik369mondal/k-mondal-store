@@ -47,13 +47,13 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-16">
-            <div className="card max-w-md mx-auto">
-                <h2 className="text-3xl font-bold text-center mb-8 text-dark">Create Account</h2>
+        <div className="container mx-auto px-6 py-20">
+            <div className="card max-w-lg mx-auto border border-cream-dark">
+                <h2 className="text-4xl font-bold text-center mb-10 text-charcoal">Create Account</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Full Name</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Full Name</label>
                         <input
                             type="text"
                             name="name"
@@ -66,7 +66,7 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Email</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Email</label>
                         <input
                             type="email"
                             name="email"
@@ -79,7 +79,7 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Password</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Password</label>
                         <input
                             type="password"
                             name="password"
@@ -93,7 +93,7 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Confirm Password</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Confirm Password</label>
                         <input
                             type="password"
                             name="confirmPassword"
@@ -105,14 +105,14 @@ const SignupPage = () => {
                         />
                     </div>
 
-                    <button type="submit" disabled={loading} className="btn-primary w-full">
+                    <button type="submit" disabled={loading} className="btn-primary w-full text-lg py-4">
                         {loading ? 'Creating Account...' : 'Sign Up'}
                     </button>
                 </form>
 
-                <p className="text-center mt-6 text-gray-600">
+                <p className="text-center mt-8 text-gray-600 text-base">
                     Already have an account?{' '}
-                    <Link to="/login" className="text-primary hover:text-light-green font-semibold transition-colors">
+                    <Link to="/login" className="text-primary hover:text-primary-light font-bold transition-colors underline">
                         Login here
                     </Link>
                 </p>

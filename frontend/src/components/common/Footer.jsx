@@ -2,26 +2,26 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer className="bg-dark text-white mt-auto">
-            <div className="container mx-auto px-4 py-6">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <footer className="bg-charcoal text-cream mt-auto border-t-4 border-secondary">
+            <div className="container mx-auto px-6 py-10">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
-                        <h3 className="text-lg font-bold mb-2">K Mondal Store</h3>
-                        <p className="text-gray-300 text-sm">
+                        <h3 className="text-xl font-bold mb-4 text-secondary">K Mondal Store</h3>
+                        <p className="text-cream/80 text-sm leading-relaxed">
                             Your trusted local kirana store in, Santimore, Banarhat, Jalpaiguri
                         </p>
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-bold mb-2">Contact Us</h3>
-                        <p className="text-gray-300 text-sm">Phone: +91 9733257431</p>
-                        <p className="text-gray-300 text-sm">Phone: +91 9593295965</p>
-                        <p className="text-gray-300 text-sm">Email: kmondalstore@gmail.com</p>
+                        <h3 className="text-xl font-bold mb-4 text-secondary">Contact Us</h3>
+                        <p className="text-cream/80 text-sm mb-1">Phone: +91 9733257431</p>
+                        <p className="text-cream/80 text-sm mb-1">Phone: +91 9593295965</p>
+                        <p className="text-cream/80 text-sm">Email: kmondalstore@gmail.com</p>
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-bold mb-2">Location</h3>
-                        <p className="text-gray-300 text-sm">
+                        <h3 className="text-xl font-bold mb-4 text-secondary">Location</h3>
+                        <p className="text-cream/80 text-sm leading-relaxed">
                             K Mondal Store<br />
                             Santimore, Kalabari Road<br />
                             Banarhat, Jalpaiguri<br />
@@ -30,19 +30,19 @@ const Footer = () => {
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-bold mb-2">Business Hours</h3>
+                        <h3 className="text-xl font-bold mb-4 text-secondary">Business Hours</h3>
                         {/* Monday to Saturday */}
-                        <p className="text-gray-300 text-sm">Mon - Sat: 6:00 AM - 11:45 AM</p>
-                        <p className="text-gray-300 text-sm">Mon - Sat: 3:00 PM - 9:00 PM</p>
+                        <p className="text-cream/80 text-sm mb-1">Mon - Sat: 6:00 AM - 11:45 AM</p>
+                        <p className="text-cream/80 text-sm mb-2">Mon - Sat: 3:00 PM - 9:00 PM</p>
                         {/* Sunday special hours */}
-                        <p className="text-gray-300 text-sm">Sunday: 6:00 AM - 9:00 AM</p>
-                        <p className="text-gray-300 text-sm">Sunday: 3:00 PM - 9:00 PM</p>
+                        <p className="text-cream/80 text-sm mb-1">Sunday: 6:00 AM - 9:00 AM</p>
+                        <p className="text-cream/80 text-sm">Sunday: 3:00 PM - 9:00 PM</p>
                     </div>
 
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-gray-700 text-center">
-                    <p className="text-gray-300 text-sm">
+                <div className="mt-8 pt-6 border-t border-cream/20 text-center">
+                    <p className="text-cream/70 text-sm">
                         © {new Date().getFullYear()} K Mondal Store. All rights reserved.
                     </p>
                 </div>

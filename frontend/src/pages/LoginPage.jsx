@@ -29,41 +29,43 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-16">
-            <div className="card max-w-md mx-auto">
-                <h2 className="text-3xl font-bold text-center mb-8 text-dark">Login</h2>
+        <div className="container mx-auto px-6 py-20">
+            <div className="card max-w-lg mx-auto border border-cream-dark">
+                <h2 className="text-4xl font-bold text-center mb-10 text-charcoal">Welcome Back</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Email</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Email</label>
                         <input
                             type="email"
                             required
                             className="input-field"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Enter your email"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2 text-dark">Password</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">Password</label>
                         <input
                             type="password"
                             required
                             className="input-field"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter your password"
                         />
                     </div>
 
-                    <button type="submit" disabled={loading} className="btn-primary w-full">
+                    <button type="submit" disabled={loading} className="btn-primary w-full text-lg py-4">
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
                 </form>
 
-                <p className="text-center mt-6 text-gray-600">
+                <p className="text-center mt-8 text-gray-600 text-base">
                     Don't have an account?{' '}
-                    <Link to="/signup" className="text-primary hover:text-light-green font-semibold transition-colors">
+                    <Link to="/signup" className="text-primary hover:text-primary-light font-bold transition-colors underline">
                         Sign up here
                     </Link>
                 </p>

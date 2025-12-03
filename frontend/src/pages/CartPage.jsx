@@ -14,7 +14,7 @@ const CartPage = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-6 py-12 min-h-screen">
             {showCheckout ? (
                 <Checkout onSuccess={handleCheckoutSuccess} />
             ) : (
