@@ -7,12 +7,13 @@ import {
     updateOrderStatus,
     deleteOrder
 } from '../controllers/orderController.js';
-import { protect, admin } from '../middleware/auth.js';
+import { protect, admin, optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/', createOrder);
-router.get('/user-orders', protect, getUserOrders);
+// Place specific routes BEFORE parameterized routes
+router.post('/', optionalAuth, createOrder);
+router.get('/me', protect, getUserOrders);
 router.get('/', protect, admin, getAllOrders);
 router.get('/:id', protect, getOrderById);
 router.put('/:id', protect, admin, updateOrderStatus);

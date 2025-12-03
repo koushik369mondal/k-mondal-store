@@ -5,11 +5,17 @@ import Product from '../models/Product.js';
 export const getUserOrders = async (req, res) => {
     try {
         const userId = req.user._id;
+        console.log('Fetching orders for user:', userId);
+
         const orders = await Order.find({ user: userId })
             .populate('items.product')
             .sort({ createdAt: -1 });
+
+        console.log(`Found ${orders.length} orders for user ${userId}`);
+
         res.json({ success: true, orders });
     } catch (error) {
+        console.error('Error in getUserOrders:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -19,6 +25,9 @@ export const createOrder = async (req, res) => {
     try {
         const { customerName, customerPhone, customerAddress, items } = req.body;
         const userId = req.user?._id; // Get userId if user is authenticated
+
+        console.log('Creating order - User ID:', userId);
+        console.log('User authenticated:', !!req.user);
 
         if (!items || items.length === 0) {
             return res.status(400).json({ success: false, message: 'No items in cart' });
@@ -54,12 +63,17 @@ export const createOrder = async (req, res) => {
         // Add userId if user is authenticated
         if (userId) {
             orderData.user = userId;
+            console.log('Order will be linked to user:', userId);
+        } else {
+            console.log('Order created as guest order (no user)');
         }
 
         const order = await Order.create(orderData);
+        console.log('Order created:', order._id);
 
         res.status(201).json({ success: true, order });
     } catch (error) {
+        console.error('Error in createOrder:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };

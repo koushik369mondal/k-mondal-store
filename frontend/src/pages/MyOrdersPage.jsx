@@ -17,11 +17,15 @@ const MyOrdersPage = () => {
 
     const fetchOrders = async () => {
         try {
-            const { data } = await api.get('/orders/user-orders');
-            setOrders(data.orders);
+            console.log('Fetching orders from /orders/me');
+            const { data } = await api.get('/orders/me');
+            console.log('Orders fetched:', data);
+            setOrders(data.orders || []);
         } catch (error) {
             console.error('Error fetching orders:', error);
-            alert('Failed to fetch orders: ' + error.response?.data?.message);
+            console.error('Error response:', error.response);
+            const errorMsg = error.response?.data?.message || error.message || 'Unknown error';
+            alert('Failed to fetch orders: ' + errorMsg);
         } finally {
             setLoading(false);
         }
