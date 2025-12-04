@@ -11,11 +11,11 @@ const HomePage = () => {
                 <p className="text-xl text-gray-600 font-medium">
                     Your trusted local kirana store in Santimore, Banarhat
                 </p>
-                <div className="mt-6 flex justify-center gap-3">
+                {/* <div className="mt-6 flex justify-center gap-3">
                     <span className="inline-block bg-secondary text-white px-6 py-2 rounded-full font-semibold text-sm">Premium Quality</span>
                     <span className="inline-block bg-primary text-cream px-6 py-2 rounded-full font-semibold text-sm">Fast Delivery</span>
                     <span className="inline-block bg-cream text-primary border-2 border-primary px-6 py-2 rounded-full font-semibold text-sm">Best Prices</span>
-                </div>
+                </div> */}
             </div>
 
             <ProductGrid />
