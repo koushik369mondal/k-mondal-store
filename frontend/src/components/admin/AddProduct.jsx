@@ -86,14 +86,27 @@ const AddProduct = ({ onSuccess }) => {
 
                     <div>
                         <label className="block text-base font-semibold mb-2 text-charcoal">Category</label>
-                        <input
-                            type="text"
+                        <select
                             required
-                            className="input-field"
+                            className="input-field cursor-pointer appearance-none bg-white bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%230F3D2E%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')] bg-[length:1.5rem] bg-[right_0.75rem_center] bg-no-repeat pr-12"
                             value={formData.category}
                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                            placeholder="e.g., Groceries"
-                        />
+                        >
+                            <option value="" className="text-gray-400">Select a category</option>
+                            <option value="Groceries" className="text-charcoal">Groceries</option>
+                            <option value="Soft Drink" className="text-charcoal">Soft Drink</option>
+                            <option value="Cake" className="text-charcoal">Cake</option>
+                            <option value="Rice" className="text-charcoal">Rice</option>
+                            <option value="Dal" className="text-charcoal">Dal</option>
+                            <option value="Oil & Ghee" className="text-charcoal">Oil & Ghee</option>
+                            <option value="Masala & Spices" className="text-charcoal">Masala & Spices</option>
+                            <option value="Snacks" className="text-charcoal">Snacks</option>
+                            <option value="Personal Care" className="text-charcoal">Personal Care</option>
+                            <option value="Home Care" className="text-charcoal">Home Care</option>
+                            <option value="Baby Care" className="text-charcoal">Baby Care</option>
+                            <option value="Pet Care" className="text-charcoal">Pet Care</option>
+                            <option value="Others" className="text-charcoal">Others</option>
+                        </select>
                     </div>
 
                     <div>
