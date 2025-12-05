@@ -5,6 +5,11 @@ A full-stack MERN e-commerce application with premium UI design, comprehensive o
 [![CI Pipeline](https://github.com/koushik369mondal/k-mondal-store/actions/workflows/ci.yml/badge.svg)](https://github.com/koushik369mondal/k-mondal-store/actions/workflows/ci.yml)
 [![CD Pipeline](https://github.com/koushik369mondal/k-mondal-store/actions/workflows/cd.yml/badge.svg)](https://github.com/koushik369mondal/k-mondal-store/actions/workflows/cd.yml)
 
+## 🌐 Live Demo
+
+- **Frontend**: [https://k-mondal-store-frontend.onrender.com](https://k-mondal-store-frontend.onrender.com)
+- **Backend API**: [https://k-mondal-store-backend.onrender.com](https://k-mondal-store-backend.onrender.com)
+
 ## 🚀 Quick Start
 
 ### Prerequisites

@@ -14,7 +14,17 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-app.use(cors());
+// CORS configuration to allow frontend domain
+const corsOptions = {
+    origin: [
+        'http://localhost:3000',
+        'https://k-mondal-store-frontend.onrender.com'
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

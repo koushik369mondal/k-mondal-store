@@ -85,8 +85,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
-          # Add your frontend environment variables here
-          # VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_API_URL: https://k-mondal-store-backend.onrender.com/api
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
