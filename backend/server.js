@@ -27,6 +27,15 @@ app.get('/', (req, res) => {
     res.json({ message: 'K Mondal Store API is running' });
 });
 
+// Health check endpoint for Docker and monitoring
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({
