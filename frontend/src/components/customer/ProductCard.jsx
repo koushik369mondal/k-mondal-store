@@ -1,11 +1,21 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { CartContext } from '../../context/CartContext';
 
 const ProductCard = ({ product }) => {
     const { addToCart } = useContext(CartContext);
 
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart(product);
+    };
+
     return (
-        <div className="card hover:shadow-premium-lg transition-all duration-300 border border-cream-dark hover:border-secondary flex flex-col h-full">
+        <Link
+            to={`/product/${product._id}`}
+            className="card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-cream-dark hover:border-secondary flex flex-col h-full cursor-pointer"
+        >
             <div className="w-full h-64 bg-cream rounded-xl mb-4 flex items-center justify-center overflow-hidden border border-cream-dark flex-shrink-0">
                 <img
                     src={product.image.url}
@@ -19,7 +29,7 @@ const ProductCard = ({ product }) => {
                 <div className="flex justify-between items-center mb-3">
                     <span className="text-2xl font-bold text-primary">₹{product.price}</span>
                     <button
-                        onClick={() => addToCart(product)}
+                        onClick={handleAddToCart}
                         className="btn-primary text-sm py-2 px-5"
                         disabled={!product.isAvailable}
                     >
@@ -30,7 +40,7 @@ const ProductCard = ({ product }) => {
                     <p className="text-secondary text-sm font-bold bg-secondary/10 px-3 py-1.5 rounded-lg text-center">Only {product.stock} left!</p>
                 )}
             </div>
-        </div>
+        </Link>
     );
 };
 
