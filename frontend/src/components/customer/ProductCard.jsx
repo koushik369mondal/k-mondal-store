@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
                     className="w-full h-full object-contain p-4"
                 />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-charcoal">{product.title}</h3>
+            <h3 className="text-xl font-bold mb-2 text-charcoal line-clamp-1">{product.title}</h3>
             <p className="text-gray-600 mb-4 line-clamp-3 text-sm leading-relaxed">{product.description}</p>
             <div className="mt-auto">
                 <div className="flex justify-between items-center mb-3">
