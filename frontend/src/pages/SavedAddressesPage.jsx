@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/common/Loader';
+import AddressMapPicker from '../components/common/AddressMapPicker';
 import api from '../utils/api';
 
 const SavedAddressesPage = () => {
@@ -9,6 +10,7 @@ const SavedAddressesPage = () => {
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
+    const [showMap, setShowMap] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
@@ -89,6 +91,18 @@ const SavedAddressesPage = () => {
         }
     };
 
+    const handleLocationSelect = (locationData) => {
+        if (locationData) {
+            setFormData(prev => ({
+                ...prev,
+                addressLine: locationData.formattedAddress || prev.addressLine,
+                city: locationData.city || prev.city,
+                state: locationData.state || prev.state,
+                pincode: locationData.pincode || prev.pincode
+            }));
+        }
+    };
+
     const resetForm = () => {
         setFormData({
             name: '',
@@ -101,6 +115,7 @@ const SavedAddressesPage = () => {
         });
         setEditingId(null);
         setShowForm(false);
+        setShowMap(false);
     };
 
     if (authLoading || loading) {
@@ -129,6 +144,25 @@ const SavedAddressesPage = () => {
                         <h2 className="text-2xl font-bold text-charcoal mb-6">
                             {editingId ? 'Edit Address' : 'Add New Address'}
                         </h2>
+
+                        {/* Map Section */}
+                        <div className="mb-6">
+                            <button
+                                type="button"
+                                onClick={() => setShowMap(!showMap)}
+                                className="flex items-center gap-2 bg-secondary text-white font-semibold px-5 py-3 rounded-xl hover:bg-secondary/90 transition-colors mb-4"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                </svg>
+                                {showMap ? 'Hide Map' : 'Pick Location on Map'}
+                            </button>
+
+                            {showMap && (
+                                <AddressMapPicker onLocationSelect={handleLocationSelect} />
+                            )}
+                        </div>
+
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
