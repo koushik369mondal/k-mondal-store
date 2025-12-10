@@ -81,3 +81,148 @@ export const getMe = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// Get user addresses
+export const getAddresses = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('addresses');
+        res.json({ success: true, addresses: user.addresses });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Add new address
+export const addAddress = async (req, res) => {
+    try {
+        const { name, phone, addressLine, city, state, pincode, isDefault } = req.body;
+
+        const user = await User.findById(req.user.id);
+
+        // If this is the first address or marked as default, make it default
+        if (user.addresses.length === 0 || isDefault) {
+            // Remove default from all other addresses
+            user.addresses.forEach(addr => addr.isDefault = false);
+        }
+
+        user.addresses.push({
+            name,
+            phone,
+            addressLine,
+            city,
+            state,
+            pincode,
+            isDefault: user.addresses.length === 0 || isDefault
+        });
+
+        await user.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'Address added successfully',
+            addresses: user.addresses
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Update address
+export const updateAddress = async (req, res) => {
+    try {
+        const { addressId } = req.params;
+        const { name, phone, addressLine, city, state, pincode, isDefault } = req.body;
+
+        const user = await User.findById(req.user.id);
+        const address = user.addresses.id(addressId);
+
+        if (!address) {
+            return res.status(404).json({ success: false, message: 'Address not found' });
+        }
+
+        // If marking as default, remove default from others
+        if (isDefault) {
+            user.addresses.forEach(addr => addr.isDefault = false);
+        }
+
+        address.name = name;
+        address.phone = phone;
+        address.addressLine = addressLine;
+        address.city = city;
+        address.state = state;
+        address.pincode = pincode;
+        address.isDefault = isDefault;
+
+        await user.save();
+
+        res.json({
+            success: true,
+            message: 'Address updated successfully',
+            addresses: user.addresses
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Delete address
+export const deleteAddress = async (req, res) => {
+    try {
+        const { addressId } = req.params;
+
+        const user = await User.findById(req.user.id);
+        const address = user.addresses.id(addressId);
+
+        if (!address) {
+            return res.status(404).json({ success: false, message: 'Address not found' });
+        }
+
+        const wasDefault = address.isDefault;
+        address.deleteOne();
+
+        // If deleted address was default and there are other addresses, make first one default
+        if (wasDefault && user.addresses.length > 0) {
+            user.addresses[0].isDefault = true;
+        }
+
+        await user.save();
+
+        res.json({
+            success: true,
+            message: 'Address deleted successfully',
+            addresses: user.addresses
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Set default address
+export const setDefaultAddress = async (req, res) => {
+    try {
+        const { addressId } = req.params;
+
+        const user = await User.findById(req.user.id);
+        const address = user.addresses.id(addressId);
+
+        if (!address) {
+            return res.status(404).json({ success: false, message: 'Address not found' });
+        }
+
+        // Remove default from all addresses
+        user.addresses.forEach(addr => addr.isDefault = false);
+
+        // Set this address as default
+        address.isDefault = true;
+
+        await user.save();
+
+        res.json({
+            success: true,
+            message: 'Default address updated successfully',
+            addresses: user.addresses
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
