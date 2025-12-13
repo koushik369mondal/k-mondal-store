@@ -38,18 +38,11 @@ const ProductGrid = () => {
     if (loading) return <ProductGridSkeleton />;
 
     return (
-        <>
-            {isStale && (
-                <div className="mb-4 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-2 rounded-lg text-sm">
-                    📦 Showing cached products. Updating in background...
-                </div>
-            )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {products.map(product => (
-                    <ProductCard key={product._id} product={product} />
-                ))}
-            </div>
-        </>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {products.map(product => (
+                <ProductCard key={product._id} product={product} />
+            ))}
+        </div>
     );
 };
 
