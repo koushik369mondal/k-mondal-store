@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
+import CacheWarmer from './components/common/CacheWarmer';
 import HomePage from './pages/HomePage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import AdminPage from './pages/AdminPage';
@@ -16,6 +17,7 @@ import SupportPage from './pages/SupportPage';
 function App() {
     return (
         <Router>
+            <CacheWarmer />
             <div className="flex flex-col min-h-screen">
                 <Navbar />
                 <main className="flex-grow">

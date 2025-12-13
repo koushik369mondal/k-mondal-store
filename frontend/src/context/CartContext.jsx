@@ -1,27 +1,48 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import api from '../utils/api';
+import { cache } from '../utils/cache';
 
 export const CartContext = createContext();
+
+const CART_DATA_KEY = 'cart_data';
+const CART_COUNT_KEY = 'cart_count';
 
 export const CartProvider = ({ children }) => {
     const { user } = useContext(AuthContext);
     const [cart, setCart] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Fetch cart from MongoDB when user logs in
+    // Fetch cart from cache or MongoDB when user logs in
     useEffect(() => {
         if (user) {
-            fetchCart();
+            initializeCart();
         } else {
             // Clear cart when user logs out
             setCart([]);
+            cache.remove(CART_DATA_KEY);
+            cache.remove(CART_COUNT_KEY);
         }
     }, [user]);
 
-    const fetchCart = async () => {
+    const initializeCart = async () => {
+        // Try cache first for instant UI
+        const cachedCart = cache.get(CART_DATA_KEY);
+
+        if (cachedCart) {
+            setCart(cachedCart.data);
+
+            // Silently revalidate in background
+            fetchCart(true);
+        } else {
+            fetchCart(false);
+        }
+    };
+
+    const fetchCart = async (silent = false) => {
         try {
-            setLoading(true);
+            if (!silent) setLoading(true);
+
             const { data } = await api.get('/cart');
             // Transform MongoDB cart format to match frontend format
             const cartItems = data.cart.items.map(item => ({
@@ -35,12 +56,21 @@ export const CartProvider = ({ children }) => {
                 isAvailable: item.product.isAvailable,
                 quantity: item.quantity
             }));
+
             setCart(cartItems);
+            cache.set(CART_DATA_KEY, cartItems);
+            cache.set(CART_COUNT_KEY, cartItems.length);
         } catch (error) {
             console.error('Error fetching cart:', error);
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
+    };
+
+    const updateCartCache = (cartItems) => {
+        setCart(cartItems);
+        cache.set(CART_DATA_KEY, cartItems);
+        cache.set(CART_COUNT_KEY, cartItems.length);
     };
 
     const addToCart = async (product) => {
@@ -67,7 +97,7 @@ export const CartProvider = ({ children }) => {
                 isAvailable: item.product.isAvailable,
                 quantity: item.quantity
             }));
-            setCart(cartItems);
+            updateCartCache(cartItems);
         } catch (error) {
             console.error('Error adding to cart:', error);
             alert(error.response?.data?.message || 'Failed to add item to cart');
@@ -92,7 +122,7 @@ export const CartProvider = ({ children }) => {
                 isAvailable: item.product.isAvailable,
                 quantity: item.quantity
             }));
-            setCart(cartItems);
+            updateCartCache(cartItems);
         } catch (error) {
             console.error('Error removing from cart:', error);
             alert('Failed to remove item from cart');
@@ -120,7 +150,7 @@ export const CartProvider = ({ children }) => {
                 isAvailable: item.product.isAvailable,
                 quantity: item.quantity
             }));
-            setCart(cartItems);
+            updateCartCache(cartItems);
         } catch (error) {
             console.error('Error updating quantity:', error);
             alert('Failed to update quantity');
@@ -130,12 +160,14 @@ export const CartProvider = ({ children }) => {
     const clearCart = async () => {
         if (!user) {
             setCart([]);
+            cache.remove(CART_DATA_KEY);
+            cache.remove(CART_COUNT_KEY);
             return;
         }
 
         try {
             await api.delete('/cart/clear');
-            setCart([]);
+            updateCartCache([]);
         } catch (error) {
             console.error('Error clearing cart:', error);
         }
@@ -159,3 +191,4 @@ export const CartProvider = ({ children }) => {
         </CartContext.Provider>
     );
 };
+
