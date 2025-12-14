@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
 import groceryIcon from '../../public/images/cart.png';
+import logo from '../../public/images/logo.png';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
@@ -36,8 +37,11 @@ const Navbar = () => {
         <nav className="bg-primary text-cream shadow-premium-lg sticky top-0 z-50">
             <div className="container mx-auto px-6 py-5">
                 <div className="flex justify-between items-center">
-                    <Link to="/" className="text-3xl font-bold text-secondary hover:text-secondary-light transition-colors" onClick={closeMenu}>
-                        K Mondal Store
+                    <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity" onClick={closeMenu}>
+                        <img src={logo} alt="K Mondal Store Logo" className="w-12 h-12 drop-shadow-lg" />
+                        <span className="text-3xl font-bold text-secondary hover:text-secondary-light transition-colors">
+                            K Mondal Store
+                        </span>
                     </Link>
 
                     {/* Hamburger Menu Button */}
