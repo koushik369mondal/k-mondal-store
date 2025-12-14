@@ -104,6 +104,21 @@ const Checkout = ({ onSuccess }) => {
         setSelectedPaymentMethod(methodId);
     };
 
+    // Calculate charges
+    const calculateCharges = () => {
+        const itemsTotal = getTotal();
+        const deliveryCharges = itemsTotal < 100 ? 40 : 0;
+        const codRiskFee = selectedPaymentMethod === 'cod' ? 20 : 0;
+        const totalAmount = itemsTotal + deliveryCharges + codRiskFee;
+
+        return {
+            itemsTotal,
+            deliveryCharges,
+            codRiskFee,
+            totalAmount
+        };
+    };
+
     const handlePlaceOrder = async () => {
         if (!selectedPaymentMethod) {
             alert('Please select a payment method');
@@ -113,9 +128,13 @@ const Checkout = ({ onSuccess }) => {
         setLoading(true);
 
         try {
+            const charges = calculateCharges();
+
             const orderData = {
                 ...lockedAddress,
                 paymentMethod: selectedPaymentMethod,
+                deliveryCharges: charges.deliveryCharges,
+                codRiskFee: charges.codRiskFee,
                 items: cart.map(item => ({
                     product: item.product?._id || item._id,
                     quantity: item.quantity
@@ -219,8 +238,8 @@ const Checkout = ({ onSuccess }) => {
                                                         key={address._id}
                                                         onClick={() => setSelectedAddressId(address._id)}
                                                         className={`cursor-pointer p-4 rounded-xl border-2 transition-all ${selectedAddressId === address._id
-                                                                ? 'border-secondary bg-cream/50'
-                                                                : 'border-cream-dark bg-white hover:border-primary'
+                                                            ? 'border-secondary bg-cream/50'
+                                                            : 'border-cream-dark bg-white hover:border-primary'
                                                             }`}
                                                     >
                                                         <div className="flex items-start gap-3">
@@ -323,8 +342,8 @@ const Checkout = ({ onSuccess }) => {
                                         key={method.id}
                                         onClick={() => handlePaymentSelect(method.id)}
                                         className={`cursor-pointer p-5 rounded-xl border-2 transition-all ${selectedPaymentMethod === method.id
-                                                ? 'border-secondary bg-cream/50 shadow-md'
-                                                : 'border-cream-dark bg-white hover:border-primary hover:shadow-sm'
+                                            ? 'border-secondary bg-cream/50 shadow-md'
+                                            : 'border-cream-dark bg-white hover:border-primary hover:shadow-sm'
                                             }`}
                                     >
                                         <div className="flex items-center gap-4">
@@ -357,24 +376,66 @@ const Checkout = ({ onSuccess }) => {
                         <div className="space-y-3">
                             <div className="flex justify-between text-gray-700">
                                 <span>Items Total:</span>
-                                <span className="font-semibold">₹{getTotal()}</span>
+                                <span className="font-semibold">₹{calculateCharges().itemsTotal}</span>
                             </div>
+
+                            {/* Delivery Charges */}
                             <div className="flex justify-between text-gray-700">
-                                <span>Delivery Charges:</span>
-                                <span className="font-semibold text-green-600">FREE</span>
+                                <span className="flex items-center gap-1">
+                                    Delivery Charges:
+                                    {calculateCharges().itemsTotal < 100 && (
+                                        <span className="text-xs text-orange-600">(Below ₹100)</span>
+                                    )}
+                                </span>
+                                {calculateCharges().deliveryCharges > 0 ? (
+                                    <span className="font-semibold text-orange-600">₹{calculateCharges().deliveryCharges}</span>
+                                ) : (
+                                    <span className="font-semibold text-green-600">FREE</span>
+                                )}
                             </div>
+
+                            {/* COD Risk Fee */}
+                            {selectedPaymentMethod === 'cod' && (
+                                <div className="flex justify-between text-gray-700">
+                                    <span className="flex items-center gap-1">
+                                        COD Risk Fee:
+                                        <span className="text-xs text-blue-600">(Cash on Delivery)</span>
+                                    </span>
+                                    <span className="font-semibold text-blue-600">₹{calculateCharges().codRiskFee}</span>
+                                </div>
+                            )}
+
+                            {/* Total Amount */}
                             <div className="border-t-2 border-secondary pt-3 flex justify-between font-bold text-xl">
                                 <span className="text-charcoal">Total Amount:</span>
-                                <span className="text-secondary text-2xl">₹{getTotal()}</span>
+                                <span className="text-secondary text-2xl">₹{calculateCharges().totalAmount}</span>
                             </div>
+
+                            {/* Savings Message */}
+                            {calculateCharges().itemsTotal >= 100 && (
+                                <div className="bg-green-50 border border-green-400 rounded-lg p-2 text-center">
+                                    <p className="text-green-700 text-sm font-semibold">
+                                        🎉 You saved ₹40 on delivery charges!
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Minimum Order Message */}
+                            {calculateCharges().itemsTotal < 100 && (
+                                <div className="bg-orange-50 border border-orange-400 rounded-lg p-2 text-center">
+                                    <p className="text-orange-700 text-sm font-semibold">
+                                        💡 Add ₹{(100 - calculateCharges().itemsTotal).toFixed(2)} more to get FREE delivery!
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         <button
                             onClick={handlePlaceOrder}
                             disabled={loading || !selectedPaymentMethod}
                             className={`w-full text-lg py-4 mt-6 rounded-xl font-bold transition-all ${loading || !selectedPaymentMethod
-                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'btn-secondary hover:scale-105'
+                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                : 'btn-secondary hover:scale-105'
                                 }`}
                         >
                             {loading ? (
@@ -386,13 +447,13 @@ const Checkout = ({ onSuccess }) => {
                                     Processing...
                                 </span>
                             ) : (
-                                '🔒 Pay & Place Order'
+                                '🔒 Place Order'
                             )}
                         </button>
 
                         {selectedPaymentMethod === 'cod' && (
                             <p className="text-sm text-gray-600 text-center mt-3">
-                                💡 Pay when you receive your order
+                                💡 Pay ₹{calculateCharges().totalAmount} when you receive your order
                             </p>
                         )}
                     </div>
