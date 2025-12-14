@@ -4,6 +4,7 @@ import api from '../../utils/api';
 const OrderManagement = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deletingOrderId, setDeletingOrderId] = useState(null);
 
     useEffect(() => {
         fetchOrders();
@@ -26,6 +27,37 @@ const OrderManagement = () => {
             fetchOrders();
         } catch (error) {
             alert('Error updating order status');
+        }
+    };
+
+    const handleDeleteOrder = async (orderId, orderNumber) => {
+        const confirmDelete = window.confirm(
+            `⚠️ WARNING: Are you sure you want to permanently delete Order #${orderNumber}?\n\nThis action CANNOT be undone and will remove all order data from the database.`
+        );
+
+        if (!confirmDelete) return;
+
+        // Double confirmation for safety
+        const doubleConfirm = window.confirm(
+            'This is your final confirmation. The order will be permanently deleted. Continue?'
+        );
+
+        if (!doubleConfirm) return;
+
+        setDeletingOrderId(orderId);
+        try {
+            await api.delete(`/orders/${orderId}`);
+
+            // Remove order from local state
+            setOrders(prevOrders => prevOrders.filter(order => order._id !== orderId));
+
+            alert('✅ Order deleted successfully from database');
+        } catch (error) {
+            console.error('Error deleting order:', error);
+            const errorMsg = error.response?.data?.message || error.message || 'Unknown error';
+            alert('❌ Failed to delete order: ' + errorMsg);
+        } finally {
+            setDeletingOrderId(null);
         }
     };
 
@@ -89,6 +121,30 @@ const OrderManagement = () => {
                                 <option value="delivered">Delivered</option>
                                 <option value="cancelled">Cancelled</option>
                             </select>
+
+                            <button
+                                onClick={() => handleDeleteOrder(order._id, order._id.slice(-8).toUpperCase())}
+                                disabled={deletingOrderId === order._id}
+                                className={`ml-auto px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 ${deletingOrderId === order._id
+                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        : 'bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg hover:scale-105'
+                                    }`}
+                                title="Permanently delete this order from database"
+                            >
+                                {deletingOrderId === order._id ? (
+                                    <>
+                                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    <>
+                                        🗑️ Delete
+                                    </>
+                                )}
+                            </button>
                         </div>
                     </div>
                 ))}
