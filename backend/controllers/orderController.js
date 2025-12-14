@@ -126,6 +126,38 @@ export const updateOrderStatus = async (req, res) => {
     }
 };
 
+// Cancel order (User can cancel their own orders)
+export const cancelOrder = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+
+        // Ensure user can only cancel their own orders (unless admin)
+        if (req.user.role !== 'admin' && order.user && order.user.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ success: false, message: 'Not authorized to cancel this order' });
+        }
+
+        // Check if order can be cancelled (only pending and confirmed orders)
+        if (order.status === 'cancelled') {
+            return res.status(400).json({ success: false, message: 'Order is already cancelled' });
+        }
+
+        if (order.status === 'delivered') {
+            return res.status(400).json({ success: false, message: 'Cannot cancel delivered orders' });
+        }
+
+        order.status = 'cancelled';
+        await order.save();
+
+        res.json({ success: true, message: 'Order cancelled successfully', order });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 // Delete order (Admin only)
 export const deleteOrder = async (req, res) => {
     try {
