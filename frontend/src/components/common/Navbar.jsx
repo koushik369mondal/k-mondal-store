@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
-import groceryIcon from '../../public/images/grocery-store.png';
+import groceryIcon from '../../public/images/cart.png';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
