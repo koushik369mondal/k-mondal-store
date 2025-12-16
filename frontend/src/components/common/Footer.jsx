@@ -14,9 +14,15 @@ const Footer = () => {
 
                     <div>
                         <h3 className="text-xl font-bold mb-4 text-secondary">Contact Us</h3>
-                        <p className="text-cream/80 text-sm mb-1">Phone: +91 9733257431</p>
-                        <p className="text-cream/80 text-sm mb-1">Phone: +91 9593295965</p>
-                        <p className="text-cream/80 text-sm">Email: kmondalstore@gmail.com</p>
+                        <p className="text-cream/80 text-sm mb-1">
+                            Phone: <a href="tel:+919733257431" className="hover:text-secondary transition-colors">+91 9733257431</a>
+                        </p>
+                        <p className="text-cream/80 text-sm mb-1">
+                            Phone: <a href="tel:+919593295965" className="hover:text-secondary transition-colors">+91 9593295965</a>
+                        </p>
+                        <p className="text-cream/80 text-sm">
+                            Email: <a href="mailto:kmondalstore@gmail.com" className="hover:text-secondary transition-colors">kmondalstore@gmail.com</a>
+                        </p>
                     </div>
 
                     <div>
