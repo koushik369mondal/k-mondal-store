@@ -35,8 +35,12 @@ const SupportPage = () => {
                                     <h3 className="text-lg font-bold text-charcoal">Phone Support</h3>
                                 </div>
                                 <p className="text-gray-600 mb-2">Call us at:</p>
-                                <p className="text-primary font-bold text-xl">+91 9733257431</p>
-                                <p className="text-primary font-bold text-xl">+91 9593295965</p>
+                                <p className="text-primary font-bold text-xl">
+                                    <a href="tel:+919733257431" className="hover:text-primary-dark transition-colors">+91 9733257431</a>
+                                </p>
+                                <p className="text-primary font-bold text-xl">
+                                    <a href="tel:+919593295965" className="hover:text-primary-dark transition-colors">+91 9593295965</a>
+                                </p>
                             </div>
 
                             <div className="bg-white rounded-xl p-6 border border-cream-dark">
@@ -47,7 +51,9 @@ const SupportPage = () => {
                                     <h3 className="text-lg font-bold text-charcoal">Email Support</h3>
                                 </div>
                                 <p className="text-gray-600 mb-2">Email us at:</p>
-                                <p className="text-primary font-bold text-lg">kmondalstore@gmail.com</p>
+                                <p className="text-primary font-bold text-lg">
+                                    <a href="mailto:kmondalstore@gmail.com" className="hover:text-primary-dark transition-colors">kmondalstore@gmail.com</a>
+                                </p>
                             </div>
                         </div>
                     </div>
