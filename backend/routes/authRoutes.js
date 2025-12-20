@@ -3,6 +3,7 @@ import {
     register,
     login,
     getMe,
+    updateProfile,
     getAddresses,
     addAddress,
     updateAddress,
@@ -16,6 +17,7 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login', login);
 router.get('/me', protect, getMe);
+router.put('/me', protect, updateProfile);
 
 // Address routes
 router.get('/addresses', protect, getAddresses);
