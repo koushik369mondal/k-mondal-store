@@ -6,6 +6,7 @@ import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+import keepAliveJob from './config/cron.js';
 
 dotenv.config();
 
@@ -56,6 +57,10 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+
+    // Start the cron job to keep the server awake
+    keepAliveJob.start();
+    console.log('[Cron] Keep-alive job started - running every 14 minutes');
 });
 
 export default app;
