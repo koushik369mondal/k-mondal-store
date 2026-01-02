@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import PRODUCT_CATEGORIES from '../config/categories.js';
 
 const productSchema = new mongoose.Schema({
     title: {
@@ -27,7 +28,8 @@ const productSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        default: 'General'
+        enum: PRODUCT_CATEGORIES,
+        default: 'Others'
     },
     stock: {
         type: Number,

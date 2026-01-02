@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
+import PRODUCT_CATEGORIES from '../../utils/categories';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -171,19 +172,11 @@ const ProductList = () => {
                                                             value={editForm.category}
                                                             onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
                                                         >
-                                                            <option value="Groceries">Groceries</option>
-                                                            <option value="Soft Drink">Soft Drink</option>
-                                                            <option value="Cake">Cake</option>
-                                                            <option value="Rice">Rice</option>
-                                                            <option value="Dal">Dal</option>
-                                                            <option value="Oil & Ghee">Oil & Ghee</option>
-                                                            <option value="Masala & Spices">Masala & Spices</option>
-                                                            <option value="Snacks">Snacks</option>
-                                                            <option value="Personal Care">Personal Care</option>
-                                                            <option value="Home Care">Home Care</option>
-                                                            <option value="Baby Care">Baby Care</option>
-                                                            <option value="Pet Care">Pet Care</option>
-                                                            <option value="Others">Others</option>
+                                                            {PRODUCT_CATEGORIES.map((category) => (
+                                                                <option key={category} value={category}>
+                                                                    {category}
+                                                                </option>
+                                                            ))}
                                                         </select>
                                                     </div>
 

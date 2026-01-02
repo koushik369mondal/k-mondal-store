@@ -1,5 +1,15 @@
 import Product from '../models/Product.js';
 import cloudinary from '../config/cloudinary.js';
+import PRODUCT_CATEGORIES from '../config/categories.js';
+
+// Get all categories
+export const getCategories = async (req, res) => {
+    try {
+        res.json({ success: true, categories: PRODUCT_CATEGORIES });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 // Get all products
 export const getAllProducts = async (req, res) => {
@@ -88,12 +98,14 @@ export const updateProduct = async (req, res) => {
             };
         }
 
-        product.title = title || product.title;
-        product.description = description || product.description;
-        product.price = price || product.price;
-        product.category = category || product.category;
-        product.stock = stock !== undefined ? stock : product.stock;
-        product.isAvailable = isAvailable !== undefined ? isAvailable : product.isAvailable;
+        // Update fields with exact values provided (no auto-increment)
+        // Only update if value is provided, otherwise keep existing
+        if (title !== undefined && title !== '') product.title = title;
+        if (description !== undefined && description !== '') product.description = description;
+        if (price !== undefined && price !== '') product.price = Number(price);
+        if (category !== undefined && category !== '') product.category = category;
+        if (stock !== undefined && stock !== '') product.stock = Number(stock);
+        if (isAvailable !== undefined) product.isAvailable = isAvailable;
 
         await product.save();
         res.json({ success: true, product });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../utils/api';
+import PRODUCT_CATEGORIES from '../../utils/categories';
 
 const AddProduct = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
@@ -93,19 +94,11 @@ const AddProduct = ({ onSuccess }) => {
                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         >
                             <option value="" className="text-gray-400">Select a category</option>
-                            <option value="Groceries" className="text-charcoal">Groceries</option>
-                            <option value="Soft Drink" className="text-charcoal">Soft Drink</option>
-                            <option value="Cake" className="text-charcoal">Cake</option>
-                            <option value="Rice" className="text-charcoal">Rice</option>
-                            <option value="Dal" className="text-charcoal">Dal</option>
-                            <option value="Oil & Ghee" className="text-charcoal">Oil & Ghee</option>
-                            <option value="Masala & Spices" className="text-charcoal">Masala & Spices</option>
-                            <option value="Snacks" className="text-charcoal">Snacks</option>
-                            <option value="Personal Care" className="text-charcoal">Personal Care</option>
-                            <option value="Home Care" className="text-charcoal">Home Care</option>
-                            <option value="Baby Care" className="text-charcoal">Baby Care</option>
-                            <option value="Pet Care" className="text-charcoal">Pet Care</option>
-                            <option value="Others" className="text-charcoal">Others</option>
+                            {PRODUCT_CATEGORIES.map((category) => (
+                                <option key={category} value={category} className="text-charcoal">
+                                    {category}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
