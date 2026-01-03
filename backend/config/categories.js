@@ -6,71 +6,53 @@
 
 export const PRODUCT_CATEGORIES = [
     // Default placeholder
-    'Select', 
+    'Select',
 
-    // Food & Grocery
-    'Fruits & Vegetables',
-    'Dairy & Eggs',
-    'Bakery & Bread',
-    'Rice & Grains',
-    'Dal & Pulses',
+    // All categories sorted alphabetically for easy navigation
     'Atta, Flours & Sooji',
-    'Oil & Ghee',
-    'Masala & Spices',
-    'Dry Fruits & Nuts',
-
-    // Beverages & Drinks
-    'Tea & Coffee',
-    'Soft Drinks',
-    'Juices & Cold Drinks',
-    'Energy & Health Drinks',
-    'Water & Soda',
-
-    // Packaged & Processed Foods
-    'Snacks & Namkeen',
-    'Biscuits & Cookies',
-    'Chocolates & Sweets',
-    'Breakfast Cereals',
-    'Noodles & Pasta',
-    'Ready to Eat',
-    'Sauces & Spreads',
-    'Pickles & Chutneys',
-
-    // Frozen & Chilled
-    'Frozen Foods',
-    'Ice Cream',
-
-    // Personal Care
-    'Bath & Body',
-    'Hair Care',
-    'Oral Care',
-    'Skin Care',
-    'Men\'s Grooming',
-    'Women\'s Hygiene',
-    'Fragrances & Deos',
-
-    // Household Essentials
-    'Detergents & Fabric Care',
-    'Cleaning Supplies',
-    'Kitchen & Dining',
-    'Home & Living',
-    'Stationery & Office',
-    'Pooja & Festive Needs',
-
-    // Health & Wellness
-    'Health & Nutrition',
     'Baby Care',
-    'Pharmacy & Wellness',
-
-    // Pet Care
-    'Pet Food & Supplies',
-
-    // Electrical & Accessories
+    'Bakery & Bread',
+    'Bath & Body',
     'Batteries & Electrical',
-
-    // Seasonal & Others
+    'Biscuits & Cookies',
+    'Breakfast Cereals',
+    'Chocolates & Sweets',
+    'Cleaning Supplies',
+    'Dairy & Eggs',
+    'Dal & Pulses',
+    'Detergents & Fabric Care',
+    'Dry Fruits & Nuts',
+    'Energy & Health Drinks',
+    'Fragrances & Deos',
+    'Frozen Foods',
+    'Fruits & Vegetables',
+    'Hair Care',
+    'Health & Nutrition',
+    'Home & Living',
+    'Ice Cream',
+    'Juices & Cold Drinks',
+    'Kitchen & Dining',
+    'Masala & Spices',
+    'Men\'s Grooming',
+    'Noodles & Pasta',
+    'Oil & Ghee',
+    'Oral Care',
+    'Others',
+    'Pet Food & Supplies',
+    'Pharmacy & Wellness',
+    'Pickles & Chutneys',
+    'Pooja & Festive Needs',
+    'Ready to Eat',
+    'Rice & Grains',
+    'Sauces & Spreads',
     'Seasonal Products',
-    'Others'
+    'Skin Care',
+    'Snacks & Namkeen',
+    'Soft Drinks',
+    'Stationery & Office',
+    'Tea & Coffee',
+    'Water & Soda',
+    'Women\'s Hygiene'
 ];
 
 // Export as default for easy import
