@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CacheWarmer from './components/common/CacheWarmer';
+import Chatbot from './components/common/Chatbot';
 import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
@@ -37,6 +38,7 @@ function App() {
                     </Routes>
                 </main>
                 <Footer />
+                <Chatbot />
             </div>
         </Router>
     );
