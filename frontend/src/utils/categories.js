@@ -4,6 +4,9 @@
  */
 
 export const PRODUCT_CATEGORIES = [
+    // Default placeholder
+    'Select', 
+
     // Food & Grocery
     'Fruits & Vegetables',
     'Dairy & Eggs',
