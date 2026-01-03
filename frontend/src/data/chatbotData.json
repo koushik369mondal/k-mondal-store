@@ -74,9 +74,11 @@
     "search|find|look": "search"
   },
   "quickSuggestions": [
-    "Store Hours",
-    "Delivery Info",
-    "Store Location",
-    "Payment Options"
+    ["Store Hours", "Delivery Info", "Store Location", "Payment Options"],
+    ["Contact Number", "Store Owner", "Find Milk", "Categories"],
+    ["Fresh Fruits", "Rice & Grains", "Snacks", "Order Status"],
+    ["Return Policy", "Create Account", "View Cart", "Search Products"],
+    ["Cooking Oil", "Tea & Coffee", "Dairy Products", "Spices"],
+    ["Baby Care", "Cleaning Supplies", "Personal Care", "Pet Supplies"]
   ]
 }

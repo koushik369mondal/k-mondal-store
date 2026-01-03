@@ -12,8 +12,20 @@ const Chatbot = () => {
         }
     ]);
     const [inputText, setInputText] = useState('');
+    const [currentSuggestionSet, setCurrentSuggestionSet] = useState(0);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
+
+    // Get random suggestion set on mount
+    useEffect(() => {
+        const randomSet = Math.floor(Math.random() * chatbotData.quickSuggestions.length);
+        setCurrentSuggestionSet(randomSet);
+    }, []);
+
+    // Rotate to next suggestion set after each interaction
+    const rotateSuggestions = () => {
+        setCurrentSuggestionSet(prev => (prev + 1) % chatbotData.quickSuggestions.length);
+    };
 
     // Auto-scroll to latest message
     const scrollToBottom = () => {
@@ -81,6 +93,9 @@ const Chatbot = () => {
 
         // Clear input
         setInputText('');
+
+        // Rotate to next suggestion set
+        rotateSuggestions();
     };
 
     const handleQuickSuggestion = (suggestion) => {
@@ -161,8 +176,8 @@ const Chatbot = () => {
                             >
                                 <div
                                     className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${message.sender === 'user'
-                                            ? 'bg-primary text-cream rounded-br-sm'
-                                            : 'bg-white text-charcoal border border-cream-dark rounded-bl-sm shadow-sm'
+                                        ? 'bg-primary text-cream rounded-br-sm'
+                                        : 'bg-white text-charcoal border border-cream-dark rounded-bl-sm shadow-sm'
                                         }`}
                                 >
                                     <p className="text-sm whitespace-pre-line">{message.text}</p>
@@ -173,22 +188,20 @@ const Chatbot = () => {
                     </div>
 
                     {/* Quick Suggestions */}
-                    {messages.length <= 1 && (
-                        <div className="px-4 py-2 border-t border-cream-dark bg-white">
-                            <p className="text-xs text-gray-600 mb-2">Quick questions:</p>
-                            <div className="flex flex-wrap gap-2">
-                                {chatbotData.quickSuggestions.map((suggestion, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => handleQuickSuggestion(suggestion)}
-                                        className="text-xs bg-cream hover:bg-primary hover:text-white text-charcoal px-3 py-1.5 rounded-full border border-cream-dark transition-colors"
-                                    >
-                                        {suggestion}
-                                    </button>
-                                ))}
-                            </div>
+                    <div className="px-4 py-2 border-t border-cream-dark bg-white">
+                        <p className="text-xs text-gray-600 mb-2">Quick questions:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {chatbotData.quickSuggestions[currentSuggestionSet]?.map((suggestion, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleQuickSuggestion(suggestion)}
+                                    className="text-xs bg-cream hover:bg-primary hover:text-white text-charcoal px-3 py-1.5 rounded-full border border-cream-dark transition-colors"
+                                >
+                                    {suggestion}
+                                </button>
+                            ))}
                         </div>
-                    )}
+                    </div>
 
                     {/* Input Area */}
                     <div className="border-t-2 border-cream-dark p-4 bg-white rounded-b-2xl">
