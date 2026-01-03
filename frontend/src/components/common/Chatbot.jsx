@@ -119,6 +119,9 @@ const Chatbot = () => {
                     timestamp: new Date()
                 };
                 setMessages(prev => [...prev, botMessage]);
+
+                // Rotate suggestions after bot responds
+                rotateSuggestions();
             }, 300);
             setInputText('');
         }, 100);
