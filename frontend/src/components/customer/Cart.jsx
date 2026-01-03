@@ -16,8 +16,8 @@ const Cart = ({ onCheckout }) => {
     }
 
     return (
-        <div className="px-2 py-4 md:px-6 md:py-6 max-w-5xl mx-auto">
-            <h2 className="text-xl md:text-3xl font-bold mb-4 md:mb-8 text-gray-800 border-b border-gray-200 pb-3 md:pb-4">Shopping Cart</h2>
+        <div className="w-full px-2 pt-2 pb-4 md:max-w-5xl md:mx-auto md:px-6 md:py-6">
+            <h2 className="text-xl md:text-3xl font-bold mb-3 md:mb-8 text-gray-800 border-b border-gray-200 pb-2 md:pb-4">Shopping Cart</h2>
 
             <div className="space-y-2 md:space-y-4">
                 {cart.map(item => (

@@ -127,7 +127,7 @@ const SavedAddressesPage = () => {
     }
 
     return (
-        <div className="container mx-auto px-6 py-12 min-h-screen">
+        <div className="container mx-auto px-2 py-4 md:px-6 md:py-8 min-h-screen">
             <div className="card max-w-5xl mx-auto border border-cream-dark">
                 <div className="flex justify-between items-center mb-8 border-b-2 border-secondary pb-4">
                     <h1 className="text-4xl font-bold text-charcoal">Saved Addresses</h1>

@@ -85,7 +85,7 @@ const MyOrdersPage = () => {
     }
 
     return (
-        <div className="container mx-auto px-6 py-12 min-h-screen">
+        <div className="container mx-auto px-2 py-4 md:px-6 md:py-8 min-h-screen">
             <div className="mb-8">
                 <h1 className="text-4xl font-bold text-charcoal mb-2">My Orders</h1>
                 <p className="text-gray-600 text-lg">Track and manage your orders</p>
@@ -184,8 +184,8 @@ const MyOrdersPage = () => {
                                         onClick={() => handleCancelOrder(order._id)}
                                         disabled={cancellingOrderId === order._id}
                                         className={`px-6 py-3 rounded-xl font-bold transition-all ${cancellingOrderId === order._id
-                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                                : 'bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg hover:scale-105'
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                            : 'bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg hover:scale-105'
                                             }`}
                                     >
                                         {cancellingOrderId === order._id ? (
