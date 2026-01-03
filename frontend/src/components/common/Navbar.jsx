@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
 import SearchBar from './SearchBar';
@@ -9,6 +9,7 @@ import logo from '../../public/images/logo.png';
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const { cart } = useContext(CartContext);
+    const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
@@ -163,10 +164,12 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobile Search Bar - Sticky below navbar */}
-            <div className="md:hidden bg-primary border-t border-cream/20 px-4 py-3">
-                <SearchBar onMobile={true} />
-            </div>
+            {/* Mobile Search Bar - Hidden on /search route */}
+            {location.pathname !== '/search' && (
+                <div className="md:hidden bg-primary border-t border-cream/20 px-4 py-3">
+                    <SearchBar onMobile={true} />
+                </div>
+            )}
 
             {/* Mobile Menu */}
             <div className={`md:hidden transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-96' : 'max-h-0'}`}>

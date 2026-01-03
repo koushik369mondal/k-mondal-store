@@ -63,12 +63,13 @@ const SearchPage = () => {
 
     return (
         <div className="bg-gray-50 min-h-screen">
-            {/* Back Button for Mobile */}
+            {/* Mobile Search Header - Blinkit Style */}
             <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
                 <div className="flex items-center gap-3">
                     <button
-                        onClick={() => navigate('/')}
-                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        onClick={() => navigate(-1)}
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+                        aria-label="Go back"
                     >
                         <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -78,7 +79,7 @@ const SearchPage = () => {
                 </div>
             </div>
 
-            {/* Desktop Search Bar */}
+            {/* Desktop Search Header */}
             <div className="hidden md:block bg-white border-b border-gray-200 px-4 py-4">
                 <div className="container mx-auto max-w-2xl">
                     <SearchBar />
