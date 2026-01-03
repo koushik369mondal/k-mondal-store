@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
+import SearchBar from './SearchBar';
 import groceryIcon from '../../public/images/cart.png';
 import logo from '../../public/images/logo.png';
 
@@ -35,6 +36,7 @@ const Navbar = () => {
 
     return (
         <nav className="bg-primary text-cream shadow-premium-lg sticky top-0 z-50">
+            {/* Top Navbar Section */}
             <div className="container mx-auto px-6 py-5">
                 <div className="flex justify-between items-center">
                     <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity" onClick={closeMenu}>
@@ -44,19 +46,11 @@ const Navbar = () => {
                         </span>
                     </Link>
 
-                    {/* Hamburger Menu Button */}
-                    <button
-                        className="md:hidden flex flex-col gap-1.5 p-2 hover:bg-primary-light rounded-lg transition-colors"
-                        onClick={toggleMenu}
-                        aria-label="Toggle menu"
-                    >
-                        <span className={`w-7 h-0.5 bg-cream transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-                        <span className={`w-7 h-0.5 bg-cream transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}></span>
-                        <span className={`w-7 h-0.5 bg-cream transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
-                    </button>
-
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center gap-8">
+                        {/* Desktop Search Bar */}
+                        <SearchBar className="w-96" />
+
                         <Link to="/" className="text-cream hover:text-secondary transition-colors font-medium">Home</Link>
 
                         {user && user.role === 'admin' && (
@@ -153,10 +147,30 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-                </div>
 
-                {/* Mobile Menu */}
-                <div className={`md:hidden transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-96 mt-6' : 'max-h-0'}`}>
+                    {/* Mobile Hamburger Menu */}
+                    <div className="md:hidden flex items-center gap-3">
+                        <button
+                            className="flex flex-col gap-1.5 p-2 hover:bg-primary-light rounded-lg transition-colors"
+                            onClick={toggleMenu}
+                            aria-label="Toggle menu"
+                        >
+                            <span className={`w-7 h-0.5 bg-cream transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+                            <span className={`w-7 h-0.5 bg-cream transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}></span>
+                            <span className={`w-7 h-0.5 bg-cream transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Search Bar - Sticky below navbar */}
+            <div className="md:hidden bg-primary border-t border-cream/20 px-4 py-3">
+                <SearchBar onMobile={true} />
+            </div>
+
+            {/* Mobile Menu */}
+            <div className={`md:hidden transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-96' : 'max-h-0'}`}>
+                <div className="container mx-auto px-6">
                     <div className="flex flex-col gap-4 py-4 border-t border-cream/20">
                         <Link to="/" className="text-cream hover:text-secondary transition-colors font-medium px-2" onClick={closeMenu}>Home</Link>
 

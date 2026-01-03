@@ -4,6 +4,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CacheWarmer from './components/common/CacheWarmer';
 import HomePage from './pages/HomePage';
+import SearchPage from './pages/SearchPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
@@ -23,6 +24,7 @@ function App() {
                 <main className="flex-grow">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/search" element={<SearchPage />} />
                         <Route path="/product/:id" element={<ProductDetailsPage />} />
                         <Route path="/admin" element={<AdminPage />} />
                         <Route path="/login" element={<LoginPage />} />
