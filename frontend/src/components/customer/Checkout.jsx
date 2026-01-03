@@ -162,7 +162,7 @@ const Checkout = ({ onSuccess, onBack }) => {
         <div className="w-full px-2 pt-2 pb-4 md:max-w-4xl md:mx-auto md:px-6 md:py-6">
             {/* Header with Back Button */}
             <div className="flex items-center gap-2 mb-3 md:mb-6">
-                {/* Back Button - Mobile Only */}
+                {/* Back Button - All Screen Sizes */}
                 <button
                     onClick={() => {
                         if (currentStep === 1) {
@@ -176,10 +176,10 @@ const Checkout = ({ onSuccess, onBack }) => {
                             setCurrentStep(currentStep - 1); // Go to previous step
                         }
                     }}
-                    className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg hover:bg-gray-50 transition-colors"
                     aria-label="Go back"
                 >
-                    <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
