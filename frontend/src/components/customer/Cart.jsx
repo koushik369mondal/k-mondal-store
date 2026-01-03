@@ -16,59 +16,70 @@ const Cart = ({ onCheckout }) => {
     }
 
     return (
-        <div className="card max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-charcoal border-b-2 border-secondary pb-4">Shopping Cart</h2>
+        <div className="px-2 py-4 md:px-6 md:py-6 max-w-5xl mx-auto">
+            <h2 className="text-xl md:text-3xl font-bold mb-4 md:mb-8 text-gray-800 border-b border-gray-200 pb-3 md:pb-4">Shopping Cart</h2>
 
-            <div className="space-y-5">
+            <div className="space-y-2 md:space-y-4">
                 {cart.map(item => (
-                    <div key={item._id} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 border border-cream-dark rounded-xl p-5 hover:border-secondary transition-colors bg-cream/30">
-                        <div className="w-24 h-24 flex-shrink-0 bg-white rounded-xl flex items-center justify-center border border-cream-dark shadow-sm">
+                    <div key={item._id} className="flex items-center gap-3 md:gap-4 border border-gray-200 rounded-lg p-2 md:p-4 hover:shadow-sm transition-all bg-gray-50">
+                        {/* Product Image - Left */}
+                        <div className="w-14 h-14 md:w-20 md:h-20 flex-shrink-0 bg-white rounded-lg flex items-center justify-center border border-gray-100">
                             <img
                                 src={item.image.url}
                                 alt={item.title}
-                                className="w-full h-full object-contain rounded-xl p-2"
+                                className="w-full h-full object-contain rounded-lg p-1 md:p-2"
                             />
                         </div>
-                        <div className="flex-grow w-full sm:w-auto">
-                            <h3 className="font-bold text-charcoal text-lg sm:text-xl mb-1">{item.title}</h3>
-                            <p className="text-gray-600 text-base sm:text-lg font-semibold">₹{item.price}</p>
+
+                        {/* Product Details - Middle */}
+                        <div className="flex-1 min-w-0">
+                            <h3 className="font-medium text-gray-700 text-sm md:text-lg leading-tight line-clamp-2 mb-0.5 md:mb-1">{item.title}</h3>
+                            <p className="text-gray-600 text-xs md:text-base font-semibold">₹{item.price}</p>
                         </div>
-                        <div className="flex items-center gap-3 sm:gap-3">
-                            <button
-                                onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                                className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center bg-primary text-white rounded-xl hover:bg-primary-light transition-all duration-300 text-xl font-bold shadow-md hover:shadow-lg"
-                            >
-                                −
-                            </button>
-                            <span className="px-3 sm:px-5 text-charcoal font-bold min-w-[2.5rem] text-center text-lg">{item.quantity}</span>
-                            <button
-                                onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                                className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center bg-primary text-white rounded-xl hover:bg-primary-light transition-all duration-300 text-xl font-bold shadow-md hover:shadow-lg"
-                            >
-                                +
-                            </button>
-                        </div>
-                        <div className="flex items-center justify-between w-full sm:w-auto gap-6">
-                            <div className="text-lg sm:text-xl font-bold text-primary">
-                                ₹{item.price * item.quantity}
+
+                        {/* Quantity Controls & Actions - Right */}
+                        <div className="flex flex-col items-end gap-2 md:gap-3">
+                            {/* Quantity Controls */}
+                            <div className="flex items-center gap-1.5 md:gap-2">
+                                <button
+                                    onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                                    className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center bg-primary text-white rounded-lg hover:bg-primary-light transition-all text-base md:text-lg font-semibold shadow-sm"
+                                >
+                                    −
+                                </button>
+                                <span className="px-2 md:px-3 text-gray-700 font-semibold min-w-[1.75rem] md:min-w-[2.5rem] text-center text-sm md:text-base">{item.quantity}</span>
+                                <button
+                                    onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                                    className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center bg-primary text-white rounded-lg hover:bg-primary-light transition-all text-base md:text-lg font-semibold shadow-sm"
+                                >
+                                    +
+                                </button>
                             </div>
-                            <button
-                                onClick={() => removeFromCart(item._id)}
-                                className="text-red-600 hover:text-red-800 font-bold transition-colors text-sm sm:text-base bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl"
-                            >
-                                Remove
-                            </button>
+
+                            {/* Total & Remove */}
+                            <div className="flex items-center gap-2 md:gap-3">
+                                <div className="text-sm md:text-lg font-semibold text-gray-800 whitespace-nowrap">
+                                    ₹{item.price * item.quantity}
+                                </div>
+                                <button
+                                    onClick={() => removeFromCart(item._id)}
+                                    className="text-gray-400 hover:text-red-500 transition-colors text-base md:text-lg"
+                                    aria-label="Remove item"
+                                >
+                                    🗑️
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <div className="mt-8 pt-8 border-t-2 border-cream-dark">
-                <div className="flex justify-between items-center text-xl sm:text-2xl font-bold mb-6 bg-cream rounded-xl p-6">
-                    <span className="text-charcoal">Total:</span>
-                    <span className="text-secondary text-3xl">₹{getTotal()}</span>
+            <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-200">
+                <div className="flex justify-between items-center text-lg md:text-2xl font-semibold mb-4 md:mb-6 bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200">
+                    <span className="text-gray-700">Total:</span>
+                    <span className="text-secondary text-xl md:text-3xl font-bold">₹{getTotal()}</span>
                 </div>
-                <button onClick={onCheckout} className="btn-secondary w-full text-lg py-4">
+                <button onClick={onCheckout} className="btn-secondary w-full text-base md:text-lg py-3 md:py-4">
                     Proceed to Checkout
                 </button>
             </div>
