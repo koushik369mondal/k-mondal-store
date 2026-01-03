@@ -99,6 +99,7 @@ const ProductList = () => {
                 <table className="w-full">
                     <thead className="bg-primary text-cream">
                         <tr>
+                            <th className="px-4 py-4 text-center font-bold w-16">SL</th>
                             <th className="px-6 py-4 text-left font-bold">Image</th>
                             <th className="px-6 py-4 text-left font-bold">Title</th>
                             <th className="px-6 py-4 text-left font-bold">Price</th>
@@ -108,9 +109,12 @@ const ProductList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map(product => (
+                        {products.map((product, index) => (
                             <React.Fragment key={product._id}>
                                 <tr className="border-b border-cream-dark hover:bg-cream transition-colors">
+                                    <td className="px-4 py-4 text-center font-semibold text-charcoal">
+                                        {index + 1}
+                                    </td>
                                     <td className="px-6 py-4">
                                         <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center border border-cream-dark shadow-sm">
                                             <img src={product.image.url} alt={product.title} className="w-full h-full object-contain rounded-xl p-2" />
@@ -140,7 +144,7 @@ const ProductList = () => {
 
                                 {editingProduct === product._id && (
                                     <tr className="bg-cream/50">
-                                        <td colSpan="6" className="px-6 py-6">
+                                        <td colSpan="7" className="px-6 py-6">
                                             <div className="bg-white rounded-xl p-6 border-2 border-primary shadow-lg">
                                                 <h3 className="text-xl font-bold text-charcoal mb-4 border-b-2 border-secondary pb-2">Edit Product</h3>
 
