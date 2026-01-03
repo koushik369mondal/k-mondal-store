@@ -46,7 +46,7 @@ const Navbar = () => {
                             <span className="text-3xl font-bold text-secondary hover:text-secondary-light transition-colors leading-tight">
                                 K Mondal Store
                             </span>
-                            <span className="text-xs text-cream/70 font-normal leading-tight hidden sm:block">
+                            <span className="block text-[10px] sm:text-xs text-cream/70 font-normal leading-tight">
                                 Owned by Kamakhya Mandal
                             </span>
                         </div>
