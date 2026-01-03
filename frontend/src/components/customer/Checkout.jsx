@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../context/CartContext';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../utils/api';
 
-const Checkout = ({ onSuccess }) => {
+const Checkout = ({ onSuccess, onBack }) => {
+    const navigate = useNavigate();
     const { cart, getTotal, clearCart } = useContext(CartContext);
     const { user } = useContext(AuthContext);
     const [savedAddresses, setSavedAddresses] = useState([]);
@@ -158,42 +160,66 @@ const Checkout = ({ onSuccess }) => {
 
     return (
         <div className="card max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-charcoal border-b-2 border-secondary pb-4">Checkout</h2>
+            {/* Header with Back Button */}
+            <div className="flex items-center gap-3 mb-6 md:mb-8">
+                {/* Back Button - Mobile Only */}
+                <button
+                    onClick={() => {
+                        if (currentStep === 1) {
+                            // Go back to cart view
+                            if (onBack) {
+                                onBack();
+                            } else {
+                                navigate('/cart');
+                            }
+                        } else {
+                            setCurrentStep(currentStep - 1); // Go to previous step
+                        }
+                    }}
+                    className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-cream transition-colors"
+                    aria-label="Go back"
+                >
+                    <svg className="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h2 className="text-xl md:text-3xl font-bold text-charcoal border-b-2 border-secondary pb-3 md:pb-4 flex-1">Checkout</h2>
+            </div>
 
             {/* Progress Indicator */}
-            <div className="mb-8">
-                <div className="flex items-center justify-center gap-4">
+            <div className="mb-6 md:mb-8">
+                <div className="flex items-center justify-center gap-2 md:gap-4">
                     <div className="flex items-center">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${currentStep >= 1 ? 'bg-secondary text-white' : 'bg-gray-300 text-gray-600'
+                        <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm ${currentStep >= 1 ? 'bg-secondary text-white' : 'bg-gray-300 text-gray-600'
                             }`}>
                             1
                         </div>
-                        <span className="ml-2 text-sm font-semibold text-charcoal">Address</span>
+                        <span className="ml-1 md:ml-2 text-xs md:text-sm font-semibold text-charcoal">Address</span>
                     </div>
-                    <div className={`h-1 w-16 ${currentStep >= 2 ? 'bg-secondary' : 'bg-gray-300'}`}></div>
+                    <div className={`h-1 w-12 md:w-16 ${currentStep >= 2 ? 'bg-secondary' : 'bg-gray-300'}`}></div>
                     <div className="flex items-center">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${currentStep >= 2 ? 'bg-secondary text-white' : 'bg-gray-300 text-gray-600'
+                        <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm ${currentStep >= 2 ? 'bg-secondary text-white' : 'bg-gray-300 text-gray-600'
                             }`}>
                             2
                         </div>
-                        <span className="ml-2 text-sm font-semibold text-charcoal">Payment</span>
+                        <span className="ml-1 md:ml-2 text-xs md:text-sm font-semibold text-charcoal">Payment</span>
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
                 {/* STEP 1: DELIVERY ADDRESS */}
                 <div className={`rounded-2xl border-2 ${currentStep === 1 ? 'border-secondary' : 'border-cream-dark'}`}>
-                    <div className="bg-cream p-4 rounded-t-xl border-b-2 border-cream-dark">
+                    <div className="bg-cream p-3 md:p-4 rounded-t-xl border-b-2 border-cream-dark">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xl font-bold text-charcoal flex items-center gap-2">
-                                <span className="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
+                            <h3 className="text-base md:text-xl font-bold text-charcoal flex items-center gap-2">
+                                <span className="bg-secondary text-white w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-xs md:text-sm">1</span>
                                 Delivery Address
                             </h3>
                             {lockedAddress && currentStep > 1 && (
                                 <button
                                     onClick={handleChangeAddress}
-                                    className="text-sm text-primary hover:text-primary-light font-semibold underline"
+                                    className="text-xs md:text-sm text-primary hover:text-primary-light font-semibold underline"
                                 >
                                     Change
                                 </button>
@@ -201,16 +227,16 @@ const Checkout = ({ onSuccess }) => {
                         </div>
                     </div>
 
-                    <div className="p-6">
+                    <div className="p-4 md:p-6">
                         {lockedAddress && currentStep > 1 ? (
                             // Show locked address
-                            <div className="bg-green-50 border-2 border-green-500 p-4 rounded-xl">
-                                <div className="flex items-start gap-3">
-                                    <div className="text-green-600 text-2xl">✓</div>
+                            <div className="bg-green-50 border-2 border-green-500 p-3 md:p-4 rounded-xl">
+                                <div className="flex items-start gap-2 md:gap-3">
+                                    <div className="text-green-600 text-xl md:text-2xl">✓</div>
                                     <div>
-                                        <p className="font-bold text-charcoal mb-1">{lockedAddress.customerName}</p>
-                                        <p className="text-sm text-gray-600 mb-1">{lockedAddress.customerPhone}</p>
-                                        <p className="text-sm text-gray-700">{lockedAddress.customerAddress}</p>
+                                        <p className="font-bold text-charcoal text-sm md:text-base mb-1 leading-snug">{lockedAddress.customerName}</p>
+                                        <p className="text-xs md:text-sm text-gray-600 mb-1 leading-snug">{lockedAddress.customerPhone}</p>
+                                        <p className="text-xs md:text-sm text-gray-700 leading-snug">{lockedAddress.customerAddress}</p>
                                     </div>
                                 </div>
                             </div>
@@ -274,16 +300,16 @@ const Checkout = ({ onSuccess }) => {
 
                                 {/* New Address Form */}
                                 {(useNewAddress || !user || savedAddresses.length === 0) && (
-                                    <div className="space-y-4">
+                                    <div className="space-y-3 md:space-y-4">
                                         {user && savedAddresses.length > 0 && (
-                                            <h4 className="font-semibold text-charcoal">Enter New Address</h4>
+                                            <h4 className="text-sm md:text-base font-semibold text-charcoal">Enter New Address</h4>
                                         )}
 
                                         <div>
-                                            <label className="block text-sm font-semibold mb-2 text-charcoal">Full Name</label>
+                                            <label className="block text-xs md:text-sm font-semibold mb-1.5 md:mb-2 text-charcoal">Full Name</label>
                                             <input
                                                 type="text"
-                                                className="input-field"
+                                                className="input-field text-sm md:text-base"
                                                 value={formData.customerName}
                                                 onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
                                                 placeholder="Enter your full name"
@@ -291,10 +317,10 @@ const Checkout = ({ onSuccess }) => {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold mb-2 text-charcoal">Phone Number</label>
+                                            <label className="block text-xs md:text-sm font-semibold mb-1.5 md:mb-2 text-charcoal">Phone Number</label>
                                             <input
                                                 type="tel"
-                                                className="input-field"
+                                                className="input-field text-sm md:text-base"
                                                 value={formData.customerPhone}
                                                 onChange={(e) => setFormData({ ...formData, customerPhone: e.target.value })}
                                                 placeholder="Enter your phone number"
@@ -302,10 +328,10 @@ const Checkout = ({ onSuccess }) => {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold mb-2 text-charcoal">Delivery Address</label>
+                                            <label className="block text-xs md:text-sm font-semibold mb-1.5 md:mb-2 text-charcoal">Delivery Address</label>
                                             <textarea
                                                 rows="3"
-                                                className="input-field"
+                                                className="input-field text-sm md:text-base"
                                                 value={formData.customerAddress}
                                                 onChange={(e) => setFormData({ ...formData, customerAddress: e.target.value })}
                                                 placeholder="Enter your complete delivery address"
@@ -316,7 +342,7 @@ const Checkout = ({ onSuccess }) => {
 
                                 <button
                                     onClick={handleDeliverHere}
-                                    className="btn-secondary w-full text-lg py-3 mt-6"
+                                    className="btn-secondary w-full text-base md:text-lg py-2.5 md:py-3 mt-4 md:mt-6"
                                 >
                                     Deliver Here
                                 </button>
