@@ -10,6 +10,9 @@ const Footer = () => {
                         <p className="text-cream/80 text-sm leading-relaxed">
                             Your trusted local kirana store in, Santimore, Banarhat, Jalpaiguri
                         </p>
+                        <p className="text-cream/60 text-xs mt-2 font-medium">
+                            Owner: Kamakhya Mandal
+                        </p>
                     </div>
 
                     <div>

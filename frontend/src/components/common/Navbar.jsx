@@ -42,9 +42,14 @@ const Navbar = () => {
                 <div className="flex justify-between items-center">
                     <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity" onClick={closeMenu}>
                         <img src={logo} alt="K Mondal Store Logo" className="w-12 h-12 drop-shadow-lg" />
-                        <span className="text-3xl font-bold text-secondary hover:text-secondary-light transition-colors">
-                            K Mondal Store
-                        </span>
+                        <div className="flex flex-col">
+                            <span className="text-3xl font-bold text-secondary hover:text-secondary-light transition-colors leading-tight">
+                                K Mondal Store
+                            </span>
+                            <span className="text-xs text-cream/70 font-normal leading-tight hidden sm:block">
+                                Owned by Kamakhya Mandal
+                            </span>
+                        </div>
                     </Link>
 
                     {/* Desktop Menu */}
