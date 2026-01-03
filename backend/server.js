@@ -39,13 +39,9 @@ app.get('/', (req, res) => {
 });
 
 // Health check endpoint for Docker and monitoring
-app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime()
-    });
-});
+app.get("/api/health", (req, res) => {
+    res.status(200).json({ status: "OK", message: "FinTrack API is healthy" });
+})
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
