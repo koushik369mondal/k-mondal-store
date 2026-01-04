@@ -110,12 +110,14 @@ const Checkout = ({ onSuccess, onBack }) => {
     const calculateCharges = () => {
         const itemsTotal = getTotal();
         const deliveryCharges = itemsTotal < 100 ? 40 : 0;
+        const handlingCharge = 7;
         const codRiskFee = selectedPaymentMethod === 'cod' ? 20 : 0;
-        const totalAmount = itemsTotal + deliveryCharges + codRiskFee;
+        const totalAmount = itemsTotal + deliveryCharges + handlingCharge + codRiskFee;
 
         return {
             itemsTotal,
             deliveryCharges,
+            handlingCharge,
             codRiskFee,
             totalAmount
         };
@@ -136,6 +138,7 @@ const Checkout = ({ onSuccess, onBack }) => {
                 ...lockedAddress,
                 paymentMethod: selectedPaymentMethod,
                 deliveryCharges: charges.deliveryCharges,
+                handlingCharge: charges.handlingCharge,
                 codRiskFee: charges.codRiskFee,
                 items: cart.map(item => ({
                     product: item.product?._id || item._id,
@@ -418,6 +421,12 @@ const Checkout = ({ onSuccess, onBack }) => {
                                 ) : (
                                     <span className="font-semibold text-green-600">FREE</span>
                                 )}
+                            </div>
+
+                            {/* Handling Charge */}
+                            <div className="flex justify-between text-gray-700 text-sm md:text-base">
+                                <span>Handling Charge:</span>
+                                <span className="font-semibold">₹{calculateCharges().handlingCharge}</span>
                             </div>
 
                             {/* COD Risk Fee */}
