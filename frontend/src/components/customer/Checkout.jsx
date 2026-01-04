@@ -109,7 +109,7 @@ const Checkout = ({ onSuccess, onBack }) => {
     // Calculate charges
     const calculateCharges = () => {
         const itemsTotal = getTotal();
-        const deliveryCharges = itemsTotal < 100 ? 40 : 0;
+        const deliveryCharges = itemsTotal < 300 ? 40 : 0;
         const handlingCharge = 7;
         const codRiskFee = selectedPaymentMethod === 'cod' ? 20 : 0;
         const totalAmount = itemsTotal + deliveryCharges + handlingCharge + codRiskFee;
@@ -412,8 +412,8 @@ const Checkout = ({ onSuccess, onBack }) => {
                             <div className="flex justify-between text-gray-700 text-sm md:text-base">
                                 <span className="flex items-center gap-1">
                                     Delivery Charges:
-                                    {calculateCharges().itemsTotal < 100 && (
-                                        <span className="text-[10px] md:text-xs text-orange-600">(Below ₹100)</span>
+                                    {calculateCharges().itemsTotal < 300 && (
+                                        <span className="text-[10px] md:text-xs text-orange-600">(Below ₹300)</span>
                                     )}
                                 </span>
                                 {calculateCharges().deliveryCharges > 0 ? (
@@ -447,7 +447,7 @@ const Checkout = ({ onSuccess, onBack }) => {
                             </div>
 
                             {/* Savings Message */}
-                            {calculateCharges().itemsTotal >= 100 && (
+                            {calculateCharges().itemsTotal >= 300 && (
                                 <div className="bg-green-50 border border-green-300 rounded-lg p-2 text-center">
                                     <p className="text-green-700 text-xs md:text-sm font-medium">
                                         🎉 You saved ₹40 on delivery charges!
@@ -456,10 +456,10 @@ const Checkout = ({ onSuccess, onBack }) => {
                             )}
 
                             {/* Minimum Order Message */}
-                            {calculateCharges().itemsTotal < 100 && (
+                            {calculateCharges().itemsTotal < 300 && (
                                 <div className="bg-orange-50 border border-orange-300 rounded-lg p-2 text-center">
                                     <p className="text-orange-700 text-xs md:text-sm font-medium">
-                                        💡 Add ₹{(100 - calculateCharges().itemsTotal).toFixed(2)} more to get FREE delivery!
+                                        💡 Add ₹{(300 - calculateCharges().itemsTotal).toFixed(2)} more to get FREE delivery!
                                     </p>
                                 </div>
                             )}
