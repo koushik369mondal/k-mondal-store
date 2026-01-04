@@ -109,7 +109,7 @@ const Checkout = ({ onSuccess, onBack }) => {
     // Calculate charges
     const calculateCharges = () => {
         const itemsTotal = getTotal();
-        const deliveryCharges = itemsTotal < 300 ? 40 : 0;
+        const deliveryCharges = itemsTotal < 300 ? 38 : 0;
         const handlingCharge = 7;
         const codRiskFee = selectedPaymentMethod === 'cod' ? 20 : 0;
         const totalAmount = itemsTotal + deliveryCharges + handlingCharge + codRiskFee;
@@ -450,7 +450,7 @@ const Checkout = ({ onSuccess, onBack }) => {
                             {calculateCharges().itemsTotal >= 300 && (
                                 <div className="bg-green-50 border border-green-300 rounded-lg p-2 text-center">
                                     <p className="text-green-700 text-xs md:text-sm font-medium">
-                                        🎉 You saved ₹40 on delivery charges!
+                                        🎉 You saved ₹38 on delivery charges!
                                     </p>
                                 </div>
                             )}
