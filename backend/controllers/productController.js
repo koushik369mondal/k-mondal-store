@@ -14,7 +14,33 @@ export const getCategories = async (req, res) => {
 // Get all products
 export const getAllProducts = async (req, res) => {
     try {
+        const { groupByCategory } = req.query;
+
+        // Fetch all products sorted by createdAt
         const products = await Product.find().sort({ createdAt: -1 });
+
+        // If groupByCategory query param is provided, group products by category
+        if (groupByCategory === 'true') {
+            const groupedProducts = {};
+
+            products.forEach(product => {
+                const category = product.category || 'Others';
+
+                // Initialize category array if it doesn't exist
+                if (!groupedProducts[category]) {
+                    groupedProducts[category] = [];
+                }
+
+                groupedProducts[category].push(product);
+            });
+
+            // Remove 'Select' category if it exists (placeholder only)
+            delete groupedProducts['Select'];
+
+            return res.json({ success: true, groupedProducts });
+        }
+
+        // Default: return flat array for admin panel and backward compatibility
         res.json({ success: true, products });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
