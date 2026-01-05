@@ -66,10 +66,17 @@ const ProductGrid = ({ products: externalProducts, loading: externalLoading, sea
         cat => displayGroupedProducts[cat] && displayGroupedProducts[cat].length > 0
     );
 
-    // Sort categories according to PRODUCT_CATEGORIES order
-    const sortedCategories = PRODUCT_CATEGORIES.filter(cat =>
-        availableCategories.includes(cat) && cat !== 'Select'
-    );
+    // Sort categories: first by PRODUCT_CATEGORIES order, then alphabetically for others
+    const sortedCategories = [
+        // Categories from PRODUCT_CATEGORIES that have products
+        ...PRODUCT_CATEGORIES.filter(cat =>
+            availableCategories.includes(cat) && cat !== 'Select'
+        ),
+        // Categories not in PRODUCT_CATEGORIES (sorted alphabetically)
+        ...availableCategories
+            .filter(cat => !PRODUCT_CATEGORIES.includes(cat))
+            .sort()
+    ];
 
     // Show empty state if search query exists but no results
     if (searchQuery && availableCategories.length === 0) {
