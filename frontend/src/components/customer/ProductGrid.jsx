@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { CACHE_EXPIRY } from '../../utils/cache';
 import ProductCard from './ProductCard';
@@ -31,8 +31,6 @@ const ProductGrid = ({ products: externalProducts, loading: externalLoading, sea
     const [groupedProducts, setGroupedProducts] = useState({});
     const [loading, setLoading] = useState(true);
     const [isStale, setIsStale] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('all');
-    const categoryRefs = useRef({});
 
     // Use external products if provided, otherwise fetch internally
     const displayGroupedProducts = externalProducts !== undefined
@@ -58,24 +56,6 @@ const ProductGrid = ({ products: externalProducts, loading: externalLoading, sea
         } catch (error) {
             console.error('Error fetching products:', error);
             setLoading(false);
-        }
-    };
-
-    // Scroll to category
-    const scrollToCategory = (category) => {
-        setSelectedCategory(category);
-        if (category === 'all') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else if (categoryRefs.current[category]) {
-            const element = categoryRefs.current[category];
-            const offset = 120; // Account for sticky header
-            const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
         }
     };
 
@@ -108,37 +88,6 @@ const ProductGrid = ({ products: externalProducts, loading: externalLoading, sea
 
     return (
         <div className="w-full">
-            {/* Category Selector - Sticky horizontal scroll */}
-            {!searchQuery && sortedCategories.length > 0 && (
-                <div className="sticky top-14 z-40 bg-white border-b border-gray-200 shadow-sm mb-6">
-                    <div className="overflow-x-auto scrollbar-hide">
-                        <div className="flex gap-2 px-4 py-3 min-w-max">
-                            <button
-                                onClick={() => scrollToCategory('all')}
-                                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory === 'all'
-                                        ? 'bg-green-600 text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                            >
-                                All
-                            </button>
-                            {sortedCategories.map(category => (
-                                <button
-                                    key={category}
-                                    onClick={() => scrollToCategory(category)}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory === category
-                                            ? 'bg-green-600 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                >
-                                    {category}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            )}
-
             {/* Category-based product display */}
             {sortedCategories.map((category) => {
                 const products = displayGroupedProducts[category];
@@ -148,7 +97,6 @@ const ProductGrid = ({ products: externalProducts, loading: externalLoading, sea
                 return (
                     <div
                         key={category}
-                        ref={el => categoryRefs.current[category] = el}
                         className="mb-8"
                     >
                         {/* Category Heading */}
