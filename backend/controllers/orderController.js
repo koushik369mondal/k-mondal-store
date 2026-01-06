@@ -1,6 +1,9 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
+// Helper to get product price (backward compatible)
+const getProductPrice = (product) => product.sellingPrice || product.price;
+
 // Get user orders (for logged-in users)
 export const getUserOrders = async (req, res) => {
     try {
@@ -42,14 +45,16 @@ export const createOrder = async (req, res) => {
                 return res.status(404).json({ success: false, message: `Product not found: ${item.product}` });
             }
 
+            const productPrice = getProductPrice(product);
+
             orderItems.push({
                 product: product._id,
                 title: product.title,
-                price: product.price,
+                price: productPrice,
                 quantity: item.quantity
             });
 
-            totalAmount += product.price * item.quantity;
+            totalAmount += productPrice * item.quantity;
         }
 
         const orderData = {

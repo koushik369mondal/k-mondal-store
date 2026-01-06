@@ -6,6 +6,10 @@ const ProductCard = ({ product }) => {
     const { addToCart, cart } = useContext(CartContext);
     const [isAdding, setIsAdding] = useState(false);
 
+    // Get final price with fallback for backward compatibility
+    const finalPrice = product.finalPrice || product.sellingPrice || product.price;
+    const mrp = product.mrp;
+
     // Check if product is already in cart
     const cartItem = cart?.find(item => item.product?._id === product._id);
     const quantity = cartItem?.quantity || 0;
@@ -52,8 +56,20 @@ const ProductCard = ({ product }) => {
 
                 {/* Price and Add Button */}
                 <div className="flex items-center justify-between mt-auto">
-                    <div className="flex flex-col">
-                        <span className="text-base font-bold text-gray-900">₹{product.price}</span>
+                    <div className="flex flex-col gap-1">
+                        {mrp && mrp > finalPrice ? (
+                            <>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs text-gray-400 line-through">₹{mrp}</span>
+                                    <span className="text-[10px] font-semibold bg-green-500 text-white px-1.5 py-0.5 rounded">
+                                        {Math.round(((mrp - finalPrice) / mrp) * 100)}% OFF
+                                    </span>
+                                </div>
+                                <span className="text-base font-bold text-gray-900">₹{finalPrice}</span>
+                            </>
+                        ) : (
+                            finalPrice && <span className="text-base font-bold text-gray-900">₹{finalPrice}</span>
+                        )}
                     </div>
 
                     {/* Blinkit-style Add Button */}

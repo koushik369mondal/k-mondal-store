@@ -1,6 +1,9 @@
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
 
+// Helper to get product price (backward compatible)
+const getProductPrice = (product) => product.sellingPrice || product.price;
+
 // Get user's cart
 export const getCart = async (req, res) => {
     try {
@@ -38,7 +41,7 @@ export const addToCart = async (req, res) => {
                 items: [{
                     product: productId,
                     quantity,
-                    price: product.price
+                    price: getProductPrice(product)
                 }]
             });
         } else {
@@ -52,7 +55,7 @@ export const addToCart = async (req, res) => {
                 cart.items.push({
                     product: productId,
                     quantity,
-                    price: product.price
+                    price: getProductPrice(product)
                 });
             }
 

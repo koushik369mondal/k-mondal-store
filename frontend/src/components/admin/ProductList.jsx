@@ -9,7 +9,8 @@ const ProductList = () => {
     const [editForm, setEditForm] = useState({
         title: '',
         description: '',
-        price: '',
+        mrp: '',
+        sellingPrice: '',
         category: '',
         stock: ''
     });
@@ -35,7 +36,8 @@ const ProductList = () => {
         setEditForm({
             title: product.title,
             description: product.description,
-            price: product.price,
+            mrp: product.mrp || '',
+            sellingPrice: product.sellingPrice,
             category: product.category,
             stock: product.stock
         });
@@ -47,7 +49,8 @@ const ProductList = () => {
         setEditForm({
             title: '',
             description: '',
-            price: '',
+            mrp: '',
+            sellingPrice: '',
             category: '',
             stock: ''
         });
@@ -59,7 +62,8 @@ const ProductList = () => {
             const formData = new FormData();
             formData.append('title', editForm.title);
             formData.append('description', editForm.description);
-            formData.append('price', editForm.price);
+            if (editForm.mrp) formData.append('mrp', editForm.mrp);
+            formData.append('sellingPrice', editForm.sellingPrice);
             formData.append('category', editForm.category);
             formData.append('stock', editForm.stock);
             if (newImage) {
@@ -102,7 +106,8 @@ const ProductList = () => {
                             <th className="px-4 py-4 text-center font-bold w-16">SL</th>
                             <th className="px-6 py-4 text-left font-bold">Image</th>
                             <th className="px-6 py-4 text-left font-bold">Title</th>
-                            <th className="px-6 py-4 text-left font-bold">Price</th>
+                            <th className="px-6 py-4 text-left font-bold">MRP</th>
+                            <th className="px-6 py-4 text-left font-bold">Selling Price</th>
                             <th className="px-6 py-4 text-left font-bold">Stock</th>
                             <th className="px-6 py-4 text-left font-bold">Category</th>
                             <th className="px-6 py-4 text-left font-bold">Actions</th>
@@ -121,7 +126,26 @@ const ProductList = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-charcoal font-semibold">{product.title}</td>
-                                    <td className="px-6 py-4 text-secondary font-bold text-lg">₹{product.price}</td>
+                                    <td className="px-6 py-4">
+                                        {product.mrp ? (
+                                            <span className="text-gray-500">₹{product.mrp}</span>
+                                        ) : (
+                                            <span className="text-gray-400 text-sm">-</span>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-secondary font-bold text-lg">
+                                                ₹{product.finalPrice || product.sellingPrice || product.price}
+                                            </span>
+                                            {product.mrp && (product.finalPrice || product.sellingPrice || product.price) &&
+                                                product.mrp > (product.finalPrice || product.sellingPrice || product.price) && (
+                                                    <span className="text-xs text-green-600 font-semibold">
+                                                        {Math.round(((product.mrp - (product.finalPrice || product.sellingPrice || product.price)) / product.mrp) * 100)}% off
+                                                    </span>
+                                                )}
+                                        </div>
+                                    </td>
                                     <td className="px-6 py-4 text-charcoal font-semibold">{product.stock}</td>
                                     <td className="px-6 py-4 text-charcoal">{product.category}</td>
                                     <td className="px-6 py-4">
@@ -160,16 +184,6 @@ const ProductList = () => {
                                                     </div>
 
                                                     <div>
-                                                        <label className="block text-sm font-semibold mb-2 text-charcoal">Price (₹)</label>
-                                                        <input
-                                                            type="number"
-                                                            className="input-field"
-                                                            value={editForm.price}
-                                                            onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
-                                                        />
-                                                    </div>
-
-                                                    <div>
                                                         <label className="block text-sm font-semibold mb-2 text-charcoal">Category</label>
                                                         <select
                                                             className="input-field cursor-pointer appearance-none bg-white bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%230F3D2E%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')] bg-[length:1.5rem] bg-[right_0.75rem_center] bg-no-repeat pr-12"
@@ -182,6 +196,29 @@ const ProductList = () => {
                                                                 </option>
                                                             ))}
                                                         </select>
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="block text-sm font-semibold mb-2 text-charcoal">
+                                                            MRP (₹) <span className="text-xs text-gray-500 font-normal">(Optional)</span>
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            className="input-field"
+                                                            value={editForm.mrp}
+                                                            onChange={(e) => setEditForm({ ...editForm, mrp: e.target.value })}
+                                                            placeholder="Leave empty if no discount"
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="block text-sm font-semibold mb-2 text-charcoal">Selling Price (₹)</label>
+                                                        <input
+                                                            type="number"
+                                                            className="input-field"
+                                                            value={editForm.sellingPrice}
+                                                            onChange={(e) => setEditForm({ ...editForm, sellingPrice: e.target.value })}
+                                                        />
                                                     </div>
 
                                                     <div>

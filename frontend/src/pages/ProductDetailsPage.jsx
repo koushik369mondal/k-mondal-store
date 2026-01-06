@@ -13,6 +13,10 @@ const ProductDetailsPage = () => {
     const [quantity, setQuantity] = useState(1);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+    // Get final price with fallback for backward compatibility
+    const finalPrice = product?.finalPrice || product?.sellingPrice || product?.price;
+    const mrp = product?.mrp;
+
     // Get current cart quantity for this product
     const cartItem = cart?.find(item => item.product?._id === id);
     const cartQuantity = cartItem?.quantity || 0;
@@ -134,10 +138,32 @@ const ProductDetailsPage = () => {
                         {product.title}
                     </h2>
 
-                    {/* Price Section */}
-                    <div className="flex items-baseline gap-3 mb-6">
-                        <span className="text-3xl font-bold text-gray-900">₹{product.price}</span>
-                        <span className="text-sm text-gray-500">MRP (incl. of all taxes)</span>
+                    {/* Price Section with MRP and Discount */}
+                    <div className="mb-6">
+                        {mrp && finalPrice && mrp > finalPrice ? (
+                            <>
+                                <div className="flex items-center gap-3 mb-2">
+                                    <span className="text-sm text-gray-400 line-through">₹{mrp}</span>
+                                    <span className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                        {Math.round(((mrp - finalPrice) / mrp) * 100)}% OFF
+                                    </span>
+                                </div>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-3xl font-bold text-gray-900">₹{finalPrice}</span>
+                                    <span className="text-sm text-gray-500">MRP (incl. of all taxes)</span>
+                                </div>
+                                <div className="mt-2 text-sm text-green-600 font-medium">
+                                    You save ₹{(mrp - finalPrice).toFixed(2)}
+                                </div>
+                            </>
+                        ) : (
+                            finalPrice && (
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-3xl font-bold text-gray-900">₹{finalPrice}</span>
+                                    <span className="text-sm text-gray-500">MRP (incl. of all taxes)</span>
+                                </div>
+                            )
+                        )}
                     </div>
 
                     {/* Delivery Info - Blinkit style */}

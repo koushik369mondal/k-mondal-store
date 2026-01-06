@@ -11,10 +11,20 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    price: {
+    mrp: {
+        type: Number,
+        min: 0,
+        default: null
+    },
+    sellingPrice: {
         type: Number,
         required: true,
         min: 0
+    },
+    price: {
+        type: Number,
+        min: 0
+        // Kept for backward compatibility - synced with sellingPrice
     },
     image: {
         url: {

@@ -6,22 +6,33 @@ const AddProduct = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        price: '',
+        mrp: '',
+        sellingPrice: '',
         category: '',
         stock: ''
     });
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
+        // Validate MRP vs Selling Price
+        if (formData.mrp && Number(formData.mrp) <= Number(formData.sellingPrice)) {
+            setError('MRP must be greater than Selling Price');
+            return;
+        }
+
         setLoading(true);
 
         try {
             const data = new FormData();
             data.append('title', formData.title);
             data.append('description', formData.description);
-            data.append('price', formData.price);
+            if (formData.mrp) data.append('mrp', formData.mrp);
+            data.append('sellingPrice', formData.sellingPrice);
             data.append('category', formData.category);
             data.append('stock', formData.stock);
             data.append('image', image);
@@ -31,11 +42,12 @@ const AddProduct = ({ onSuccess }) => {
             });
 
             alert('Product added successfully!');
-            setFormData({ title: '', description: '', price: '', category: '', stock: '' });
+            setFormData({ title: '', description: '', mrp: '', sellingPrice: '', category: '', stock: '' });
             setImage(null);
+            setError('');
             onSuccess();
         } catch (error) {
-            alert('Error adding product: ' + error.response?.data?.message);
+            setError(error.response?.data?.message || 'Error adding product');
         } finally {
             setLoading(false);
         }
@@ -70,19 +82,44 @@ const AddProduct = ({ onSuccess }) => {
                     />
                 </div>
 
+                {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        {error}
+                    </div>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label className="block text-base font-semibold mb-2 text-charcoal">Price (₹)</label>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">
+                            MRP (₹) <span className="text-sm text-gray-500 font-normal">(Optional)</span>
+                        </label>
                         <input
                             type="number"
-                            required
                             min="0"
                             step="0.01"
                             className="input-field"
-                            value={formData.price}
-                            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                            value={formData.mrp}
+                            onChange={(e) => setFormData({ ...formData, mrp: e.target.value })}
                             placeholder="0.00"
                         />
+                        <p className="text-xs text-gray-500 mt-1">Leave empty if no discount</p>
+                    </div>
+
+                    <div>
+                        <label className="block text-base font-semibold mb-2 text-charcoal">
+                            Selling Price (₹) <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            required
+                            min="0.01"
+                            step="0.01"
+                            className="input-field"
+                            value={formData.sellingPrice}
+                            onChange={(e) => setFormData({ ...formData, sellingPrice: e.target.value })}
+                            placeholder="0.00"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Actual selling price</p>
                     </div>
 
                     <div>
