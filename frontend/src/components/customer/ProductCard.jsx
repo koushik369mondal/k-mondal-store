@@ -25,10 +25,10 @@ const ProductCard = ({ product }) => {
     return (
         <Link
             to={`/product/${product._id}`}
-            className="bg-white rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden group cursor-pointer"
+            className="bg-white rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden group cursor-pointer w-full max-w-[180px] mx-auto"
         >
-            {/* Product Image - Square aspect ratio */}
-            <div className="relative w-full aspect-square bg-white flex items-center justify-center overflow-hidden p-3">
+            {/* Product Image - Fixed square size */}
+            <div className="relative w-full aspect-square bg-white flex items-center justify-center overflow-hidden p-2">
                 <img
                     src={product.image.url}
                     alt={product.title}
@@ -36,48 +36,48 @@ const ProductCard = ({ product }) => {
                 />
                 {/* Stock Badge */}
                 {product.stock < 10 && product.stock > 0 && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-md font-semibold">
+                    <div className="absolute top-1.5 left-1.5 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded font-semibold">
                         {product.stock} left
                     </div>
                 )}
                 {!product.isAvailable && (
-                    <div className="absolute top-2 left-2 bg-gray-500 text-white text-xs px-2 py-0.5 rounded-md font-semibold">
+                    <div className="absolute top-1.5 left-1.5 bg-gray-500 text-white text-[10px] px-1.5 py-0.5 rounded font-semibold">
                         Out of Stock
                     </div>
                 )}
             </div>
 
-            {/* Product Info - Compact */}
-            <div className="p-3 flex flex-col gap-2">
-                {/* Product Name - Max 2 lines with ellipsis */}
-                <h3 className="text-sm font-medium text-gray-800 line-clamp-2 leading-snug min-h-[2.5rem]">
+            {/* Product Info - Compact with fixed sizes */}
+            <div className="p-2.5 flex flex-col gap-1.5">
+                {/* Product Name - Max 2 lines with ellipsis, fixed text size */}
+                <h3 className="text-xs font-medium text-gray-800 line-clamp-2 leading-tight min-h-[2rem]">
                     {product.title}
                 </h3>
 
-                {/* Price and Add Button */}
+                {/* Price and Add Button - Fixed sizes */}
                 <div className="flex items-center justify-between mt-auto">
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-0.5">
                         {mrp && mrp > finalPrice ? (
                             <>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs text-gray-400 line-through">₹{mrp}</span>
-                                    <span className="text-[10px] font-semibold bg-green-500 text-white px-1.5 py-0.5 rounded">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[10px] text-gray-400 line-through">₹{mrp}</span>
+                                    <span className="text-[9px] font-semibold bg-green-500 text-white px-1 py-0.5 rounded">
                                         {Math.round(((mrp - finalPrice) / mrp) * 100)}% OFF
                                     </span>
                                 </div>
-                                <span className="text-base font-bold text-gray-900">₹{finalPrice}</span>
+                                <span className="text-sm font-bold text-gray-900">₹{finalPrice}</span>
                             </>
                         ) : (
-                            finalPrice && <span className="text-base font-bold text-gray-900">₹{finalPrice}</span>
+                            finalPrice && <span className="text-sm font-bold text-gray-900">₹{finalPrice}</span>
                         )}
                     </div>
 
-                    {/* Blinkit-style Add Button */}
+                    {/* Blinkit-style Add Button - Fixed size */}
                     {product.isAvailable ? (
                         <button
                             onClick={handleAddToCart}
                             className={`
-                                px-4 py-1.5 text-xs font-semibold rounded-md transition-all duration-200
+                                px-3 py-1 text-[10px] font-semibold rounded-md transition-all duration-200 whitespace-nowrap
                                 ${quantity > 0
                                     ? 'bg-primary text-white border-2 border-primary'
                                     : 'bg-white text-primary border-2 border-primary hover:bg-primary/5'
@@ -89,8 +89,8 @@ const ProductCard = ({ product }) => {
                             {quantity > 0 ? `Added (${quantity})` : 'ADD'}
                         </button>
                     ) : (
-                        <span className="px-3 py-1.5 text-xs font-semibold text-gray-400 border border-gray-300 rounded-md">
-                            Unavailable
+                        <span className="px-2 py-1 text-[10px] font-semibold text-gray-400 border border-gray-300 rounded-md">
+                            N/A
                         </span>
                     )}
                 </div>
