@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CacheWarmer from './components/common/CacheWarmer';
@@ -35,6 +35,8 @@ function App() {
                         <Route path="/profile" element={<MyProfilePage />} />
                         <Route path="/addresses" element={<SavedAddressesPage />} />
                         <Route path="/support" element={<SupportPage />} />
+                        {/* Catch-all route: redirect any unknown routes to home */}
+                        <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                 </main>
                 <Footer />
