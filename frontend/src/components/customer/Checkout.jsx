@@ -112,13 +112,24 @@ const Checkout = ({ onSuccess, onBack }) => {
         const deliveryCharges = itemsTotal < 300 ? 38 : 0;
         const handlingCharge = 7;
         const codRiskFee = selectedPaymentMethod === 'cod' ? 20 : 0;
-        const totalAmount = itemsTotal + deliveryCharges + handlingCharge + codRiskFee;
+
+        // Calculate refrigeration charges for soft drinks (₹5 per bottle)
+        const refrigerationCharges = cart.reduce((total, item) => {
+            const product = item.product || item;
+            if (product.category === 'Soft Drinks' || product.category === 'Juices & Cold Drinks') {
+                return total + (5 * item.quantity);
+            }
+            return total;
+        }, 0);
+
+        const totalAmount = itemsTotal + deliveryCharges + handlingCharge + codRiskFee + refrigerationCharges;
 
         return {
             itemsTotal,
             deliveryCharges,
             handlingCharge,
             codRiskFee,
+            refrigerationCharges,
             totalAmount
         };
     };
@@ -140,6 +151,7 @@ const Checkout = ({ onSuccess, onBack }) => {
                 deliveryCharges: charges.deliveryCharges,
                 handlingCharge: charges.handlingCharge,
                 codRiskFee: charges.codRiskFee,
+                refrigerationCharges: charges.refrigerationCharges,
                 items: cart.map(item => ({
                     product: item.product?._id || item._id,
                     quantity: item.quantity
@@ -428,6 +440,17 @@ const Checkout = ({ onSuccess, onBack }) => {
                                 <span>Handling Charge:</span>
                                 <span className="font-semibold">₹{calculateCharges().handlingCharge}</span>
                             </div>
+
+                            {/* Refrigeration Charges */}
+                            {calculateCharges().refrigerationCharges > 0 && (
+                                <div className="flex justify-between text-gray-700 text-sm md:text-base">
+                                    <span className="flex items-center gap-1">
+                                        Refrigeration Charges:
+                                        <span className="text-[10px] md:text-xs text-blue-600">(₹5 per bottle)</span>
+                                    </span>
+                                    <span className="font-semibold text-blue-600">₹{calculateCharges().refrigerationCharges}</span>
+                                </div>
+                            )}
 
                             {/* COD Risk Fee */}
                             {selectedPaymentMethod === 'cod' && (

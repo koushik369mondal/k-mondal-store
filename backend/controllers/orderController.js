@@ -26,7 +26,7 @@ export const getUserOrders = async (req, res) => {
 // Create new order
 export const createOrder = async (req, res) => {
     try {
-        const { customerName, customerPhone, customerAddress, items } = req.body;
+        const { customerName, customerPhone, customerAddress, items, paymentMethod, deliveryCharges, handlingCharge, codRiskFee, refrigerationCharges } = req.body;
         const userId = req.user?._id; // Get userId if user is authenticated
 
         console.log('Creating order - User ID:', userId);
@@ -74,6 +74,11 @@ export const createOrder = async (req, res) => {
             customerPhone,
             customerAddress,
             items: orderItems,
+            paymentMethod: paymentMethod || 'cod',
+            deliveryCharges: deliveryCharges || 0,
+            handlingCharge: handlingCharge || 0,
+            codRiskFee: codRiskFee || 0,
+            refrigerationCharges: refrigerationCharges || 0,
             totalAmount
         };
 

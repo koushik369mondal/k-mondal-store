@@ -32,6 +32,26 @@ const orderSchema = new mongoose.Schema({
             min: 1
         }
     }],
+    deliveryCharges: {
+        type: Number,
+        default: 0
+    },
+    handlingCharge: {
+        type: Number,
+        default: 0
+    },
+    codRiskFee: {
+        type: Number,
+        default: 0
+    },
+    refrigerationCharges: {
+        type: Number,
+        default: 0
+    },
+    paymentMethod: {
+        type: String,
+        default: 'cod'
+    },
     totalAmount: {
         type: Number,
         required: true

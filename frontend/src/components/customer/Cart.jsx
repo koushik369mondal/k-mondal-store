@@ -75,8 +75,30 @@ const Cart = ({ onCheckout }) => {
             </div>
 
             <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-200">
+                {/* Calculate refrigeration charges */}
+                {(() => {
+                    const refrigerationCharges = cart.reduce((total, item) => {
+                        if (item.category === 'Soft Drinks' || item.category === 'Juices & Cold Drinks') {
+                            return total + (5 * item.quantity);
+                        }
+                        return total;
+                    }, 0);
+
+                    return refrigerationCharges > 0 ? (
+                        <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3 md:p-4">
+                            <div className="flex justify-between items-center text-sm md:text-base text-blue-800">
+                                <span className="flex items-center gap-1 md:gap-2">
+                                    ❄️ Refrigeration Charges
+                                    <span className="text-xs text-blue-600">(₹5 per bottle)</span>
+                                </span>
+                                <span className="font-semibold">₹{refrigerationCharges}</span>
+                            </div>
+                        </div>
+                    ) : null;
+                })()}
+
                 <div className="flex justify-between items-center text-lg md:text-2xl font-semibold mb-4 md:mb-6 bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200">
-                    <span className="text-gray-700">Total:</span>
+                    <span className="text-gray-700">Items Total:</span>
                     <span className="text-secondary text-xl md:text-3xl font-bold">₹{getTotal()}</span>
                 </div>
                 <button onClick={onCheckout} className="btn-secondary w-full text-base md:text-lg py-3 md:py-4">
