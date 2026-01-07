@@ -45,6 +45,14 @@ export const createOrder = async (req, res) => {
                 return res.status(404).json({ success: false, message: `Product not found: ${item.product}` });
             }
 
+            // Check if product has enough stock
+            if (product.stock < item.quantity) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Insufficient stock for ${product.title}. Available: ${product.stock}, Requested: ${item.quantity}`
+                });
+            }
+
             const productPrice = getProductPrice(product);
 
             orderItems.push({
@@ -55,6 +63,10 @@ export const createOrder = async (req, res) => {
             });
 
             totalAmount += productPrice * item.quantity;
+
+            // Reduce stock
+            product.stock -= item.quantity;
+            await product.save();
         }
 
         const orderData = {
@@ -134,7 +146,7 @@ export const updateOrderStatus = async (req, res) => {
 // Cancel order (User can cancel their own orders)
 export const cancelOrder = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id);
+        const order = await Order.findById(req.params.id).populate('items.product');
 
         if (!order) {
             return res.status(404).json({ success: false, message: 'Order not found' });
@@ -152,6 +164,17 @@ export const cancelOrder = async (req, res) => {
 
         if (order.status === 'delivered') {
             return res.status(400).json({ success: false, message: 'Cannot cancel delivered orders' });
+        }
+
+        // Restore stock for cancelled orders
+        for (const item of order.items) {
+            if (item.product) {
+                const product = await Product.findById(item.product._id || item.product);
+                if (product) {
+                    product.stock += item.quantity;
+                    await product.save();
+                }
+            }
         }
 
         order.status = 'cancelled';
