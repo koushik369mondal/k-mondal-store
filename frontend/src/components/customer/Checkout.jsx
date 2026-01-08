@@ -154,15 +154,25 @@ const Checkout = ({ onSuccess, onBack }) => {
                 refrigerationCharges: charges.refrigerationCharges,
                 items: cart.map(item => ({
                     product: item.product?._id || item._id,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    sellingPrice: item.sellingPrice || item.price // Include sellingPrice from cart
                 }))
             };
+
+            // Log order data for debugging
+            console.log('=== CHECKOUT DEBUG ===');
+            console.log('Cart items:', cart);
+            console.log('Order data being sent:', JSON.stringify(orderData, null, 2));
+            console.log('All items have sellingPrice:', orderData.items.every(item => item.sellingPrice));
 
             const { data } = await api.post('/orders', orderData);
             await clearCart();
             onSuccess(data.order);
         } catch (error) {
-            alert('Error placing order: ' + error.response?.data?.message);
+            const errorMessage = error.response?.data?.message || error.message || 'Error placing order. Please try again.';
+            console.error('Order placement error:', error);
+            console.error('Error details:', error.response?.data);
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }

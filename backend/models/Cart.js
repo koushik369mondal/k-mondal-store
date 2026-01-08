@@ -15,6 +15,11 @@ const cartItemSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    sellingPrice: {
+        type: Number,
+        required: true,
+        min: 0
     }
 });
 

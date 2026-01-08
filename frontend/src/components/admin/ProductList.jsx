@@ -81,8 +81,8 @@ const ProductList = () => {
                 alert('Product title is required');
                 return;
             }
-            if (!editForm.sellingPrice || editForm.sellingPrice <= 0) {
-                alert('Please enter a valid selling price');
+            if (!editForm.sellingPrice || Number(editForm.sellingPrice) <= 0) {
+                alert('Selling Price is required and must be greater than 0');
                 return;
             }
             if (!editForm.category) {
@@ -91,6 +91,11 @@ const ProductList = () => {
             }
             if (editForm.stock < 0) {
                 alert('Stock cannot be negative');
+                return;
+            }
+            // Validate MRP vs Selling Price if MRP is provided
+            if (editForm.mrp && editForm.mrp > 0 && Number(editForm.mrp) <= Number(editForm.sellingPrice)) {
+                alert('MRP must be greater than Selling Price');
                 return;
             }
 

@@ -19,6 +19,12 @@ const AddProduct = ({ onSuccess }) => {
         e.preventDefault();
         setError('');
 
+        // Validate that sellingPrice is provided
+        if (!formData.sellingPrice || Number(formData.sellingPrice) <= 0) {
+            setError('Selling Price is required and must be greater than 0');
+            return;
+        }
+
         // Validate MRP vs Selling Price
         if (formData.mrp && Number(formData.mrp) <= Number(formData.sellingPrice)) {
             setError('MRP must be greater than Selling Price');

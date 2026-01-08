@@ -4,6 +4,21 @@ import Product from '../models/Product.js';
 // Helper to get product price (backward compatible)
 const getProductPrice = (product) => product.sellingPrice || product.price;
 
+// Helper to derive product selling price with fallback logic
+const deriveSellingPrice = (product) => {
+    // Priority: sellingPrice > price > mrp
+    if (product.sellingPrice && product.sellingPrice > 0) {
+        return product.sellingPrice;
+    }
+    if (product.price && product.price > 0) {
+        return product.price;
+    }
+    if (product.mrp && product.mrp > 0) {
+        return product.mrp;
+    }
+    return null; // No valid price found
+};
+
 // Get user's cart
 export const getCart = async (req, res) => {
     try {
@@ -35,13 +50,22 @@ export const addToCart = async (req, res) => {
 
         let cart = await Cart.findOne({ user: req.user.id });
 
+        const sellingPrice = deriveSellingPrice(product);
+        if (!sellingPrice) {
+            return res.status(400).json({
+                success: false,
+                message: `Price configuration error for "${product.title}". Please contact support.`
+            });
+        }
+
         if (!cart) {
             cart = await Cart.create({
                 user: req.user.id,
                 items: [{
                     product: productId,
                     quantity,
-                    price: getProductPrice(product)
+                    price: sellingPrice,
+                    sellingPrice: sellingPrice
                 }]
             });
         } else {
@@ -51,11 +75,15 @@ export const addToCart = async (req, res) => {
 
             if (itemIndex > -1) {
                 cart.items[itemIndex].quantity += quantity;
+                // Update price in case it changed
+                cart.items[itemIndex].price = sellingPrice;
+                cart.items[itemIndex].sellingPrice = sellingPrice;
             } else {
                 cart.items.push({
                     product: productId,
                     quantity,
-                    price: getProductPrice(product)
+                    price: sellingPrice,
+                    sellingPrice: sellingPrice
                 });
             }
 
