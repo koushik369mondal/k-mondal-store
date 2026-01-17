@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
@@ -17,6 +17,18 @@ import SavedAddressesPage from './pages/SavedAddressesPage';
 import SupportPage from './pages/SupportPage';
 
 function App() {
+    // Auto-refresh functionality - triggers once on initial page load
+    useEffect(() => {
+        const hasRefreshed = sessionStorage.getItem('hasRefreshed');
+
+        if (!hasRefreshed) {
+            // Mark as refreshed to prevent continuous loops
+            sessionStorage.setItem('hasRefreshed', 'true');
+            // Reload the page
+            window.location.reload();
+        }
+    }, []);
+
     return (
         <Router>
             <CacheWarmer />
