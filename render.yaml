@@ -5,6 +5,11 @@ services:
     env: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://k-mondal-store-backend.onrender.com/api
+      - key: VITE_MAPBOX_TOKEN
+        value: pk.eyJ1Ijoia291c2hpazM2OW1vbmRhbCIsImEiOiJjbWowMDA0M2swMzZxM2dxcGthbGZ1ZWRsIn0.j8zOAE3UJJbrvo3h7pke1A
     headers:
       - path: /*
         name: Cache-Control
@@ -23,13 +28,23 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 5000
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
         sync: false
       - key: CLOUDINARY_CLOUD_NAME
-        sync: false
+        value: dg9rxgqs7
       - key: CLOUDINARY_API_KEY
-        sync: false
+        value: 435847878172175
       - key: CLOUDINARY_API_SECRET
         sync: false
+      - key: MAPBOX_TOKEN
+        value: pk.eyJ1Ijoia291c2hpazM2OW1vbmRhbCIsImEiOiJjbWowMDA0M2swMzZxM2dxcGthbGZ1ZWRsIn0.j8zOAE3UJJbrvo3h7pke1A
+      - key: ADMIN_EMAIL
+        value: admin@kmondalstore.com
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: API_URL
+        value: https://k-mondal-store-backend.onrender.com/api/health
