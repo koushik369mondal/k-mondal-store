@@ -1,25 +1,50 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../../context/CartContext';
+import { Plus, Minus, Check } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
-    const { addToCart, cart } = useContext(CartContext);
+    const { addToCart, updateQuantity, cart } = useContext(CartContext);
     const [isAdding, setIsAdding] = useState(false);
+    const [showAdded, setShowAdded] = useState(false);
 
     // Get final price with fallback for backward compatibility
     const finalPrice = product.finalPrice || product.sellingPrice || product.price;
     const mrp = product.mrp;
 
     // Check if product is already in cart
-    const cartItem = cart?.find(item => item.product?._id === product._id);
+    const cartItem = cart?.find(item => item._id === product._id);
     const quantity = cartItem?.quantity || 0;
 
-    const handleAddToCart = (e) => {
+    const handleAddToCart = async (e) => {
         e.preventDefault();
         e.stopPropagation();
         setIsAdding(true);
-        addToCart(product);
-        setTimeout(() => setIsAdding(false), 300);
+
+        await addToCart(product);
+
+        // Show "Added" feedback
+        setShowAdded(true);
+        setTimeout(() => {
+            setIsAdding(false);
+            setShowAdded(false);
+        }, 800);
+    };
+
+    const handleIncrement = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        await updateQuantity(product._id, quantity + 1);
+    };
+
+    const handleDecrement = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (quantity > 1) {
+            await updateQuantity(product._id, quantity - 1);
+        } else {
+            await updateQuantity(product._id, 0);
+        }
     };
 
     return (
@@ -74,20 +99,52 @@ const ProductCard = ({ product }) => {
 
                     {/* Blinkit-style Add Button - Fixed size */}
                     {product.isAvailable ? (
-                        <button
-                            onClick={handleAddToCart}
-                            className={`
-                                px-3 py-1 text-[10px] font-semibold rounded-md transition-all duration-200 whitespace-nowrap
-                                ${quantity > 0
-                                    ? 'bg-primary text-white border-2 border-primary'
-                                    : 'bg-white text-primary border-2 border-primary hover:bg-primary/5'
-                                }
-                                ${isAdding ? 'scale-90' : 'scale-100'}
-                                active:scale-95
-                            `}
-                        >
-                            {quantity > 0 ? `Added (${quantity})` : 'ADD'}
-                        </button>
+                        quantity > 0 ? (
+                            // Quantity Stepper
+                            <div className="flex items-center gap-1 bg-primary rounded-md border-2 border-primary">
+                                <button
+                                    onClick={handleDecrement}
+                                    className="text-white hover:bg-primary-light px-2 py-1 rounded-l transition-colors active:scale-90"
+                                >
+                                    <Minus className="w-3 h-3" />
+                                </button>
+                                <span className="text-white font-bold text-xs px-2 min-w-[24px] text-center">
+                                    {quantity}
+                                </span>
+                                <button
+                                    onClick={handleIncrement}
+                                    className="text-white hover:bg-primary-light px-2 py-1 rounded-r transition-colors active:scale-90"
+                                >
+                                    <Plus className="w-3 h-3" />
+                                </button>
+                            </div>
+                        ) : (
+                            // Add Button
+                            <button
+                                onClick={handleAddToCart}
+                                disabled={isAdding}
+                                className={`
+                                    px-3 py-1.5 text-[11px] font-bold rounded-md transition-all duration-200 whitespace-nowrap
+                                    flex items-center gap-1.5
+                                    ${showAdded
+                                        ? 'bg-green-500 text-white border-2 border-green-500'
+                                        : 'bg-white text-primary border-2 border-primary hover:bg-primary/5'
+                                    }
+                                    ${isAdding ? 'scale-95' : 'scale-100'}
+                                    active:scale-90
+                                    disabled:opacity-70
+                                `}
+                            >
+                                {showAdded ? (
+                                    <>
+                                        <Check className="w-3 h-3" />
+                                        <span>Added</span>
+                                    </>
+                                ) : (
+                                    'ADD'
+                                )}
+                            </button>
+                        )
                     ) : (
                         <span className="px-2 py-1 text-[10px] font-semibold text-gray-400 border border-gray-300 rounded-md">
                             N/A

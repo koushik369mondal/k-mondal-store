@@ -4,6 +4,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CacheWarmer from './components/common/CacheWarmer';
 import Chatbot from './components/common/Chatbot';
+import BottomCartBar from './components/common/BottomCartBar';
 import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
@@ -53,6 +54,7 @@ function App() {
                 </main>
                 <Footer />
                 <Chatbot />
+                <BottomCartBar />
             </div>
         </Router>
     );

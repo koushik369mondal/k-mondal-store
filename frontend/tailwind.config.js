@@ -10,6 +10,7 @@ export default {
                 primary: {
                     DEFAULT: '#0F3D2E',
                     light: '#1A5A45',
+                    dark: '#0A2A1F',
                 },
                 secondary: {
                     DEFAULT: '#F0A01A',
@@ -28,7 +29,21 @@ export default {
             spacing: {
                 '18': '4.5rem',
                 '22': '5.5rem',
-            }
+            },
+            keyframes: {
+                'slide-up': {
+                    '0%': { transform: 'translateY(100%)', opacity: '0' },
+                    '100%': { transform: 'translateY(0)', opacity: '1' },
+                },
+                'bounce-slow': {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-5px)' },
+                },
+            },
+            animation: {
+                'slide-up': 'slide-up 0.3s ease-out',
+                'bounce-slow': 'bounce-slow 2s ease-in-out infinite',
+            },
         },
     },
     plugins: [],
