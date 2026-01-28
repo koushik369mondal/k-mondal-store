@@ -39,10 +39,15 @@ export default {
                     '0%, 100%': { transform: 'translateY(0)' },
                     '50%': { transform: 'translateY(-5px)' },
                 },
+                'fadeIn': {
+                    '0%': { opacity: '0' },
+                    '100%': { opacity: '1' },
+                },
             },
             animation: {
                 'slide-up': 'slide-up 0.3s ease-out',
                 'bounce-slow': 'bounce-slow 2s ease-in-out infinite',
+                'fadeIn': 'fadeIn 0.2s ease-in',
             },
         },
     },
