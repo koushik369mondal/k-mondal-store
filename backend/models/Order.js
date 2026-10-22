@@ -57,9 +57,31 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: 'cod'
     },
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'paid', 'failed'],
+        default: 'pending'
+    },
+    razorpayOrderId: {
+        type: String
+    },
+    razorpayPaymentId: {
+        type: String
+    },
+    razorpaySignature: {
+        type: String
+    },
     totalAmount: {
         type: Number,
         required: true
+    },
+    deliverySlot: {
+        type: String,
+        default: 'Express Delivery (30-45 mins)'
+    },
+    deliveryInstructions: {
+        type: String,
+        default: ''
     },
     status: {
         type: String,

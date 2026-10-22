@@ -41,7 +41,23 @@ export const getUserOrders = async (req, res) => {
 // Create new order
 export const createOrder = async (req, res) => {
     try {
-        const { customerName, customerPhone, customerAddress, items, paymentMethod, deliveryCharges, handlingCharge, codRiskFee, refrigerationCharges } = req.body;
+        const {
+            customerName,
+            customerPhone,
+            customerAddress,
+            items,
+            paymentMethod,
+            paymentStatus,
+            razorpayOrderId,
+            razorpayPaymentId,
+            razorpaySignature,
+            deliveryCharges,
+            handlingCharge,
+            codRiskFee,
+            refrigerationCharges,
+            deliverySlot,
+            deliveryInstructions
+        } = req.body;
         const userId = req.user?._id; // Get userId if user is authenticated
 
         console.log('\n=== ORDER CREATION DEBUG ===');
@@ -129,10 +145,17 @@ export const createOrder = async (req, res) => {
             customerAddress,
             items: orderItems,
             paymentMethod: paymentMethod || 'cod',
+            paymentStatus: paymentStatus || (paymentMethod === 'cod' ? 'pending' : 'pending'),
+            status: paymentStatus === 'paid' ? 'confirmed' : 'pending',
+            razorpayOrderId: razorpayOrderId || null,
+            razorpayPaymentId: razorpayPaymentId || null,
+            razorpaySignature: razorpaySignature || null,
             deliveryCharges: deliveryCharges || 0,
             handlingCharge: handlingCharge || 0,
             codRiskFee: codRiskFee || 0,
             refrigerationCharges: refrigerationCharges || 0,
+            deliverySlot: deliverySlot || 'Express Delivery (30-45 mins)',
+            deliveryInstructions: deliveryInstructions || '',
             totalAmount
         };
 

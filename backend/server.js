@@ -6,6 +6,7 @@ import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import keepAliveJob from './config/cron.js';
 
 dotenv.config();
@@ -19,6 +20,9 @@ connectDB();
 const corsOptions = {
     origin: [
         'http://localhost:3000',
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost:4173',
         'https://k-mondal-store-frontend.onrender.com'
     ],
     credentials: true,
@@ -33,6 +37,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api', paymentRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'K Mondal Store API is running' });
