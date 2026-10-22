@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => {
     const [isAdding, setIsAdding] = useState(false);
     const [showAdded, setShowAdded] = useState(false);
 
-    // Get final price with fallback for backward compatibility
+    // Get final price with fallback
     const finalPrice = product.finalPrice || product.sellingPrice || product.price;
     const mrp = product.mrp;
 
@@ -23,7 +23,6 @@ const ProductCard = ({ product }) => {
 
         await addToCart(product);
 
-        // Show "Added" feedback
         setShowAdded(true);
         setTimeout(() => {
             setIsAdding(false);
@@ -47,112 +46,116 @@ const ProductCard = ({ product }) => {
         }
     };
 
+    const discountPercentage = mrp && mrp > finalPrice ? Math.round(((mrp - finalPrice) / mrp) * 100) : 0;
+
     return (
-        <Link
-            to={`/product/${product._id}`}
-            className="bg-white rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden group cursor-pointer w-full max-w-[180px] mx-auto"
-        >
-            {/* Product Image - Fixed square size */}
-            <div className="relative w-full aspect-square bg-white flex items-center justify-center overflow-hidden p-2">
-                <img
-                    src={product.image.url}
-                    alt={product.title}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* Stock Badge */}
-                {product.stock < 10 && product.stock > 0 && (
-                    <div className="absolute top-1.5 left-1.5 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded font-semibold">
-                        {product.stock} left
-                    </div>
-                )}
-                {!product.isAvailable && (
-                    <div className="absolute top-1.5 left-1.5 bg-gray-500 text-white text-[10px] px-1.5 py-0.5 rounded font-semibold">
-                        Out of Stock
-                    </div>
-                )}
-            </div>
+        <article className="card-chai group flex flex-col overflow-hidden sm:opacity-95 sm:hover:opacity-100 h-full">
+            <Link to={`/product/${product._id}`} className="flex flex-col flex-1">
+                {/* Product Image Media */}
+                <div className="relative w-full aspect-square bg-muted/20 flex items-center justify-center overflow-hidden p-3 border-b border-card-edge/50">
+                    <img
+                        src={product.image?.url || product.image}
+                        alt={product.title}
+                        loading="lazy"
+                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                    />
 
-            {/* Product Info - Compact with fixed sizes */}
-            <div className="p-2.5 flex flex-col gap-1.5">
-                {/* Product Name - Max 2 lines with ellipsis, fixed text size */}
-                <h3 className="text-xs font-medium text-gray-800 line-clamp-2 leading-tight min-h-[2rem]">
-                    {product.title}
-                </h3>
-
-                {/* Price and Add Button - Fixed sizes */}
-                <div className="flex items-center justify-between mt-auto">
-                    <div className="flex flex-col gap-0.5">
-                        {mrp && mrp > finalPrice ? (
-                            <>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-[10px] text-gray-400 line-through">₹{mrp}</span>
-                                    <span className="text-[9px] font-semibold bg-green-500 text-white px-1 py-0.5 rounded">
-                                        {Math.round(((mrp - finalPrice) / mrp) * 100)}% OFF
-                                    </span>
-                                </div>
-                                <span className="text-sm font-bold text-gray-900">₹{finalPrice}</span>
-                            </>
-                        ) : (
-                            finalPrice && <span className="text-sm font-bold text-gray-900">₹{finalPrice}</span>
+                    {/* Meta Badges */}
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                        {discountPercentage > 0 && (
+                            <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded backdrop-blur-sm">
+                                {discountPercentage}% off
+                            </span>
+                        )}
+                        {product.stock < 10 && product.stock > 0 && (
+                            <span className="text-[10px] font-medium text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 px-1.5 py-0.5 rounded backdrop-blur-sm">
+                                {product.stock} left
+                            </span>
+                        )}
+                        {!product.isAvailable && (
+                            <span className="text-[10px] font-medium text-muted-foreground bg-muted/80 border border-border px-1.5 py-0.5 rounded">
+                                Out of stock
+                            </span>
                         )}
                     </div>
-
-                    {/* Blinkit-style Add Button - Fixed size */}
-                    {product.isAvailable ? (
-                        quantity > 0 ? (
-                            // Quantity Stepper
-                            <div className="flex items-center gap-1 bg-primary rounded-md border-2 border-primary">
-                                <button
-                                    onClick={handleDecrement}
-                                    className="text-white hover:bg-primary-light px-2 py-1 rounded-l transition-colors active:scale-90"
-                                >
-                                    <Minus className="w-3 h-3" />
-                                </button>
-                                <span className="text-white font-bold text-xs px-2 min-w-[24px] text-center">
-                                    {quantity}
-                                </span>
-                                <button
-                                    onClick={handleIncrement}
-                                    className="text-white hover:bg-primary-light px-2 py-1 rounded-r transition-colors active:scale-90"
-                                >
-                                    <Plus className="w-3 h-3" />
-                                </button>
-                            </div>
-                        ) : (
-                            // Add Button
-                            <button
-                                onClick={handleAddToCart}
-                                disabled={isAdding}
-                                className={`
-                                    px-3 py-1.5 text-[11px] font-bold rounded-md transition-all duration-200 whitespace-nowrap
-                                    flex items-center gap-1.5
-                                    ${showAdded
-                                        ? 'bg-green-500 text-white border-2 border-green-500'
-                                        : 'bg-white text-primary border-2 border-primary hover:bg-primary/5'
-                                    }
-                                    ${isAdding ? 'scale-95' : 'scale-100'}
-                                    active:scale-90
-                                    disabled:opacity-70
-                                `}
-                            >
-                                {showAdded ? (
-                                    <>
-                                        <Check className="w-3 h-3" />
-                                        <span>Added</span>
-                                    </>
-                                ) : (
-                                    'ADD'
-                                )}
-                            </button>
-                        )
-                    ) : (
-                        <span className="px-2 py-1 text-[10px] font-semibold text-gray-400 border border-gray-300 rounded-md">
-                            N/A
-                        </span>
-                    )}
                 </div>
-            </div>
-        </Link>
+
+                {/* Product Info */}
+                <div className="p-3 flex flex-col flex-1 justify-between gap-2.5">
+                    <div>
+                        {product.category && (
+                            <span className="text-[11px] text-muted-foreground font-medium block capitalize mb-0.5">
+                                {product.category}
+                            </span>
+                        )}
+                        <h3 className="font-montserrat text-xs sm:text-sm font-semibold leading-snug text-foreground line-clamp-2">
+                            {product.title}
+                        </h3>
+                    </div>
+
+                    {/* Price and Add Control */}
+                    <div className="flex items-center justify-between mt-auto pt-2 border-t border-card-edge/40">
+                        <div className="flex flex-col">
+                            {mrp && mrp > finalPrice && (
+                                <span className="text-[11px] text-muted-foreground line-through">
+                                    ₹{mrp}
+                                </span>
+                            )}
+                            <span className="font-montserrat text-sm sm:text-base font-bold text-foreground">
+                                ₹{finalPrice}
+                            </span>
+                        </div>
+
+                        {/* ChaiUI Action: Soft Button or Stepper */}
+                        {product.isAvailable ? (
+                            quantity > 0 ? (
+                                <div
+                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    className="inline-flex h-8 items-center rounded-md border border-card-edge bg-muted/40 backdrop-blur-sm"
+                                >
+                                    <button
+                                        onClick={handleDecrement}
+                                        aria-label="Decrease quantity"
+                                        className="h-full px-2 text-foreground hover:text-brand transition-colors flex items-center justify-center"
+                                    >
+                                        <Minus className="w-3.5 h-3.5" />
+                                    </button>
+                                    <span className="font-montserrat font-semibold text-xs px-2 min-w-[20px] text-center text-foreground">
+                                        {quantity}
+                                    </span>
+                                    <button
+                                        onClick={handleIncrement}
+                                        aria-label="Increase quantity"
+                                        className="h-full px-2 text-foreground hover:text-brand transition-colors flex items-center justify-center"
+                                    >
+                                        <Plus className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={handleAddToCart}
+                                    disabled={isAdding}
+                                    className="inline-flex h-8 items-center justify-center gap-1 rounded-md bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors active:scale-95 disabled:opacity-70"
+                                >
+                                    {showAdded ? (
+                                        <>
+                                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                            <span>Added</span>
+                                        </>
+                                    ) : (
+                                        'Add'
+                                    )}
+                                </button>
+                            )
+                        ) : (
+                            <span className="text-[11px] font-medium text-muted-foreground border border-card-edge px-2 py-1 rounded">
+                                Unavailable
+                            </span>
+                        )}
+                    </div>
+                </div>
+            </Link>
+        </article>
     );
 };
 

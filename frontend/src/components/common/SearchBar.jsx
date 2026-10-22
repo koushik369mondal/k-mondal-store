@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Search, X } from 'lucide-react';
 
 const SearchBar = ({ className = '', onMobile = false }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -15,7 +16,7 @@ const SearchBar = ({ className = '', onMobile = false }) => {
         }
     }, [location.pathname]);
 
-    // Debounced search query
+    // Debounced search query from URL
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const q = params.get('q') || '';
@@ -25,7 +26,6 @@ const SearchBar = ({ className = '', onMobile = false }) => {
     const handleSearch = (value) => {
         setSearchQuery(value);
 
-        // Update URL with search query
         if (value.trim()) {
             const newParams = new URLSearchParams({ q: value.trim() });
             if (location.pathname === '/search') {
@@ -34,7 +34,6 @@ const SearchBar = ({ className = '', onMobile = false }) => {
                 navigate(`/?${newParams.toString()}`, { replace: true });
             }
         } else {
-            // Clear search if empty
             if (location.pathname === '/search') {
                 navigate('/search', { replace: true });
             } else {
@@ -51,7 +50,6 @@ const SearchBar = ({ className = '', onMobile = false }) => {
 
     const handleFocus = () => {
         setIsFocused(true);
-        // On mobile, navigate to search page when clicking search bar
         if (onMobile && location.pathname !== '/search' && window.innerWidth < 768) {
             navigate('/search');
         }
@@ -64,26 +62,13 @@ const SearchBar = ({ className = '', onMobile = false }) => {
     return (
         <div className={`relative ${className}`}>
             <div className={`
-                flex items-center gap-2 px-4 py-2.5 md:py-2
-                bg-white rounded-full border-2 transition-all duration-200
-                ${isFocused ? 'border-primary shadow-lg' : 'border-gray-200 shadow-sm'}
+                flex items-center gap-2.5 px-3.5 py-1.5 md:py-2
+                rounded-lg border transition-colors duration-200
+                bg-background/80 dark:bg-black/30 backdrop-blur-md
+                ${isFocused ? 'border-brand/70 ring-1 ring-brand/40' : 'border-card-edge hover:border-card-edge-hover'}
             `}>
-                {/* Search Icon */}
-                <svg
-                    className="w-5 h-5 text-gray-400 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                </svg>
+                <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" aria-hidden="true" />
 
-                {/* Search Input */}
                 <input
                     ref={inputRef}
                     type="text"
@@ -91,30 +76,19 @@ const SearchBar = ({ className = '', onMobile = false }) => {
                     onChange={(e) => handleSearch(e.target.value)}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    placeholder="Search for products, brands, categories"
-                    className="flex-1 outline-none text-sm md:text-base text-gray-700 placeholder-gray-400 bg-transparent"
+                    placeholder="Search groceries, staples, snacks..."
+                    aria-label="Search products"
+                    className="flex-1 outline-none text-xs sm:text-sm text-foreground placeholder:text-muted-foreground bg-transparent"
                 />
 
-                {/* Clear Button */}
                 {searchQuery && (
                     <button
                         onClick={handleClear}
-                        className="flex-shrink-0 w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+                        type="button"
+                        className="flex-shrink-0 w-5 h-5 flex items-center justify-center rounded text-muted-foreground hover:text-foreground transition-colors"
                         aria-label="Clear search"
                     >
-                        <svg
-                            className="w-4 h-4 text-gray-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <X className="w-3.5 h-3.5" />
                     </button>
                 )}
             </div>

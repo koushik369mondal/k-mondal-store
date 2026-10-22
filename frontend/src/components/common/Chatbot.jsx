@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import chatbotData from '../../data/chatbotData.json';
+import { MessageSquare, X, Send, Bot } from 'lucide-react';
 
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -7,7 +8,7 @@ const Chatbot = () => {
         {
             id: 1,
             sender: 'bot',
-            text: 'Hello 👋 Welcome to K Mondal Store. How can I help you today?',
+            text: 'Hello, welcome to K Mondal Store. How can I help you today?',
             timestamp: new Date()
         }
     ]);
@@ -16,18 +17,15 @@ const Chatbot = () => {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
-    // Get random suggestion set on mount
     useEffect(() => {
         const randomSet = Math.floor(Math.random() * chatbotData.quickSuggestions.length);
         setCurrentSuggestionSet(randomSet);
     }, []);
 
-    // Rotate to next suggestion set after each interaction
     const rotateSuggestions = () => {
         setCurrentSuggestionSet(prev => (prev + 1) % chatbotData.quickSuggestions.length);
     };
 
-    // Auto-scroll to latest message
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -36,23 +34,19 @@ const Chatbot = () => {
         scrollToBottom();
     }, [messages]);
 
-    // Focus input when chat opens
     useEffect(() => {
         if (isOpen && inputRef.current) {
             inputRef.current.focus();
         }
     }, [isOpen]);
 
-    // Match user input with keywords from JSON
     const findBestMatch = (userInput) => {
         const lowerInput = userInput.toLowerCase().trim();
 
-        // Check for greetings first
         if (chatbotData.greetings.some(greeting => lowerInput.includes(greeting))) {
             return chatbotData.responses.hello;
         }
 
-        // Check keywords
         for (const [pattern, responseKey] of Object.entries(chatbotData.keywords)) {
             const keywords = pattern.split('|');
             if (keywords.some(keyword => lowerInput.includes(keyword))) {
@@ -60,14 +54,12 @@ const Chatbot = () => {
             }
         }
 
-        // No match found
         return chatbotData.responses.fallback;
     };
 
     const handleSendMessage = () => {
         if (!inputText.trim()) return;
 
-        // Add user message
         const userMessage = {
             id: messages.length + 1,
             sender: 'user',
@@ -77,54 +69,44 @@ const Chatbot = () => {
 
         setMessages(prev => [...prev, userMessage]);
 
-        // Get bot response
-        const botResponse = findBestMatch(inputText);
+        const botReply = findBestMatch(inputText);
 
-        // Add bot message with slight delay for natural feel
         setTimeout(() => {
             const botMessage = {
                 id: messages.length + 2,
                 sender: 'bot',
-                text: botResponse,
+                text: botReply,
                 timestamp: new Date()
             };
             setMessages(prev => [...prev, botMessage]);
-        }, 300);
+            rotateSuggestions();
+        }, 400);
 
-        // Clear input
         setInputText('');
-
-        // Rotate to next suggestion set
-        rotateSuggestions();
     };
 
     const handleQuickSuggestion = (suggestion) => {
-        setInputText(suggestion);
-        // Auto-send after selecting suggestion
+        const userMessage = {
+            id: messages.length + 1,
+            sender: 'user',
+            text: suggestion,
+            timestamp: new Date()
+        };
+
+        setMessages(prev => [...prev, userMessage]);
+
+        const botReply = findBestMatch(suggestion);
+
         setTimeout(() => {
-            const userMessage = {
-                id: messages.length + 1,
-                sender: 'user',
-                text: suggestion,
+            const botMessage = {
+                id: messages.length + 2,
+                sender: 'bot',
+                text: botReply,
                 timestamp: new Date()
             };
-            setMessages(prev => [...prev, userMessage]);
-
-            const botResponse = findBestMatch(suggestion);
-            setTimeout(() => {
-                const botMessage = {
-                    id: messages.length + 2,
-                    sender: 'bot',
-                    text: botResponse,
-                    timestamp: new Date()
-                };
-                setMessages(prev => [...prev, botMessage]);
-
-                // Rotate suggestions after bot responds
-                rotateSuggestions();
-            }, 300);
-            setInputText('');
-        }, 100);
+            setMessages(prev => [...prev, botMessage]);
+            rotateSuggestions();
+        }, 400);
     };
 
     const handleKeyPress = (e) => {
@@ -136,54 +118,55 @@ const Chatbot = () => {
 
     return (
         <>
-            {/* Floating Chat Button */}
+            {/* Floating Chat Trigger Button */}
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="fixed bottom-6 right-6 bg-primary hover:bg-primary-light text-white rounded-full w-14 h-14 sm:w-16 sm:h-16 shadow-premium-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center z-40 group"
-                    aria-label="Open chat"
+                    className="card-chai fixed bottom-6 right-6 w-12 h-12 rounded-full flex items-center justify-center text-foreground hover:text-brand z-40 transition-transform active:scale-95 cursor-pointer"
+                    aria-label="Open chat assistant"
                 >
-                    <span className="text-2xl sm:text-3xl group-hover:scale-110 transition-transform">💬</span>
+                    <MessageSquare className="w-5 h-5" />
                 </button>
             )}
 
-            {/* Chat Window */}
+            {/* Chatbot Window */}
             {isOpen && (
-                <div className="fixed bottom-6 right-6 w-[90vw] sm:w-96 h-[70vh] sm:h-[500px] bg-white rounded-2xl shadow-premium-lg border-2 border-cream-dark flex flex-col z-50 animate-slideUp">
+                <div className="card-chai fixed bottom-6 right-6 w-[90vw] sm:w-96 h-[70vh] sm:h-[480px] flex flex-col z-50 overflow-hidden animate-slideUp">
                     {/* Header */}
-                    <div className="bg-primary text-cream px-4 py-4 rounded-t-2xl flex justify-between items-center border-b-2 border-secondary">
+                    <div className="p-3.5 border-b border-card-edge flex items-center justify-between bg-card-fill">
                         <div className="flex items-center gap-2">
-                            <span className="text-2xl">🤖</span>
+                            <Bot className="w-5 h-5 text-brand" />
                             <div>
-                                <h3 className="font-bold text-lg">K Mondal Store</h3>
-                                <p className="text-xs text-cream/80">Assistant</p>
+                                <h3 className="font-montserrat text-xs sm:text-sm font-semibold text-foreground">
+                                    Store assistant
+                                </h3>
+                                <p className="text-[10px] text-muted-foreground">K Mondal Store</p>
                             </div>
                         </div>
                         <button
                             onClick={() => setIsOpen(false)}
-                            className="hover:bg-primary-light rounded-lg p-2 transition-colors"
+                            className="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors"
                             aria-label="Close chat"
                         >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <X className="w-4 h-4" />
                         </button>
                     </div>
 
-                    {/* Messages Area */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-cream/20">
+                    {/* Messages Scroll Area */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-transparent">
                         {messages.map((message) => (
                             <div
                                 key={message.id}
                                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${message.sender === 'user'
-                                        ? 'bg-primary text-cream rounded-br-sm'
-                                        : 'bg-white text-charcoal border border-cream-dark rounded-bl-sm shadow-sm'
-                                        }`}
+                                    className={`max-w-[82%] text-xs sm:text-sm px-3.5 py-2.5 rounded-lg leading-relaxed ${
+                                        message.sender === 'user'
+                                            ? 'bg-primary text-primary-foreground rounded-tr-none'
+                                            : 'border border-card-edge bg-card-fill text-foreground rounded-tl-none'
+                                    }`}
                                 >
-                                    <p className="text-sm whitespace-pre-line">{message.text}</p>
+                                    <p className="whitespace-pre-line">{message.text}</p>
                                 </div>
                             </div>
                         ))}
@@ -191,14 +174,14 @@ const Chatbot = () => {
                     </div>
 
                     {/* Quick Suggestions */}
-                    <div className="px-4 py-2 border-t border-cream-dark bg-white">
-                        <p className="text-xs text-gray-600 mb-2">Quick questions:</p>
-                        <div className="flex flex-wrap gap-2">
+                    <div className="p-2.5 border-t border-card-edge bg-card-fill/50">
+                        <p className="text-[11px] text-muted-foreground mb-1.5">Suggested questions:</p>
+                        <div className="flex flex-wrap gap-1.5">
                             {chatbotData.quickSuggestions[currentSuggestionSet]?.map((suggestion, index) => (
                                 <button
                                     key={index}
                                     onClick={() => handleQuickSuggestion(suggestion)}
-                                    className="text-xs bg-cream hover:bg-primary hover:text-white text-charcoal px-3 py-1.5 rounded-full border border-cream-dark transition-colors"
+                                    className="text-[11px] px-2.5 py-1 rounded-md border border-card-edge bg-muted/40 text-muted-foreground hover:text-foreground hover:border-card-edge-hover transition-colors"
                                 >
                                     {suggestion}
                                 </button>
@@ -206,8 +189,8 @@ const Chatbot = () => {
                         </div>
                     </div>
 
-                    {/* Input Area */}
-                    <div className="border-t-2 border-cream-dark p-4 bg-white rounded-b-2xl">
+                    {/* Input Controls */}
+                    <div className="p-3 border-t border-card-edge bg-card-fill">
                         <div className="flex gap-2">
                             <input
                                 ref={inputRef}
@@ -215,40 +198,21 @@ const Chatbot = () => {
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
                                 onKeyPress={handleKeyPress}
-                                placeholder="Type your question..."
-                                className="flex-1 border border-cream-dark rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                                placeholder="Ask about timings, delivery..."
+                                className="flex-1 border border-card-edge rounded-lg px-3 py-1.5 text-xs sm:text-sm text-foreground bg-transparent placeholder:text-muted-foreground focus:outline-none focus:border-brand/70"
                             />
                             <button
                                 onClick={handleSendMessage}
                                 disabled={!inputText.trim()}
-                                className="bg-primary hover:bg-primary-light text-white px-4 py-2.5 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="btn-asym inline-flex items-center justify-center px-3 py-1.5 bg-neutral-900 text-white dark:bg-white dark:text-black disabled:opacity-40 transition-colors"
                                 aria-label="Send message"
                             >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                </svg>
+                                <Send className="w-3.5 h-3.5" />
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-
-            {/* Custom animation styles */}
-            <style jsx>{`
-                @keyframes slideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                .animate-slideUp {
-                    animation: slideUp 0.3s ease-out;
-                }
-            `}</style>
         </>
     );
 };

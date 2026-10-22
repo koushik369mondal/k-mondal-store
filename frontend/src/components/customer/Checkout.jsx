@@ -212,39 +212,39 @@ const Checkout = ({ onSuccess, onBack }) => {
             </div>
 
             {/* Progress Indicator */}
-            <div className="mb-3 md:mb-6">
-                <div className="flex items-center justify-center gap-2 md:gap-4">
+            <div className="mb-4 sm:mb-6">
+                <div className="flex items-center justify-center gap-3">
                     <div className="flex items-center">
-                        <div className={`w-7 h-7 md:w-10 md:h-10 rounded-full flex items-center justify-center font-semibold text-xs md:text-sm ${currentStep >= 1 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-500'
+                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs ${currentStep >= 1 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
                             }`}>
                             1
                         </div>
-                        <span className="ml-1 md:ml-2 text-xs md:text-sm font-medium text-gray-700">Address</span>
+                        <span className="ml-2 text-xs sm:text-sm font-medium text-foreground">Address</span>
                     </div>
-                    <div className={`h-0.5 w-10 md:w-16 ${currentStep >= 2 ? 'bg-secondary' : 'bg-gray-200'}`}></div>
+                    <div className={`h-px w-10 sm:w-16 ${currentStep >= 2 ? 'bg-primary' : 'bg-border'}`}></div>
                     <div className="flex items-center">
-                        <div className={`w-7 h-7 md:w-10 md:h-10 rounded-full flex items-center justify-center font-semibold text-xs md:text-sm ${currentStep >= 2 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-500'
+                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs ${currentStep >= 2 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
                             }`}>
                             2
                         </div>
-                        <span className="ml-1 md:ml-2 text-xs md:text-sm font-medium text-gray-700">Payment</span>
+                        <span className="ml-2 text-xs sm:text-sm font-medium text-foreground">Payment</span>
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-2 md:space-y-4">
+            <div className="space-y-4">
                 {/* STEP 1: DELIVERY ADDRESS */}
-                <div className={`rounded-lg border ${currentStep === 1 ? 'border-secondary' : 'border-gray-200'} bg-gray-50`}>
-                    <div className="bg-white p-2.5 md:p-4 rounded-t-lg border-b border-gray-200">
+                <div className={`rounded-xl border ${currentStep === 1 ? 'border-card-edge-hover' : 'border-card-edge'} bg-card-fill`}>
+                    <div className="p-3 sm:p-4 rounded-t-xl border-b border-card-edge">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-sm md:text-xl font-semibold text-gray-800 flex items-center gap-1.5 md:gap-2">
-                                <span className="bg-secondary text-white w-5 h-5 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[10px] md:text-sm font-semibold">1</span>
-                                Delivery Address
+                            <h3 className="text-sm sm:text-base font-semibold text-foreground flex items-center gap-2">
+                                <span className="bg-primary text-primary-foreground w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold">1</span>
+                                Delivery address
                             </h3>
                             {lockedAddress && currentStep > 1 && (
                                 <button
                                     onClick={handleChangeAddress}
-                                    className="text-xs md:text-sm text-primary hover:text-primary-light font-medium underline"
+                                    className="text-xs text-brand hover:underline font-medium"
                                 >
                                     Change
                                 </button>
@@ -288,9 +288,9 @@ const Checkout = ({ onSuccess, onBack }) => {
                                                     <div
                                                         key={address._id}
                                                         onClick={() => setSelectedAddressId(address._id)}
-                                                        className={`cursor-pointer p-2.5 md:p-3 rounded-lg border transition-all ${selectedAddressId === address._id
-                                                            ? 'border-secondary bg-secondary/5 shadow-sm'
-                                                            : 'border-gray-200 bg-white hover:border-gray-300'
+                                                        className={`cursor-pointer p-2.5 sm:p-3 rounded-lg border transition-all ${selectedAddressId === address._id
+                                                            ? 'border-brand/60 bg-muted/40'
+                                                            : 'border-card-edge bg-card-fill hover:border-card-edge-hover'
                                                             }`}
                                                     >
                                                         <div className="flex items-start gap-2 md:gap-3">
@@ -392,9 +392,9 @@ const Checkout = ({ onSuccess, onBack }) => {
                                     <div
                                         key={method.id}
                                         onClick={() => handlePaymentSelect(method.id)}
-                                        className={`cursor-pointer p-2.5 md:p-4 rounded-lg border transition-all ${selectedPaymentMethod === method.id
-                                            ? 'border-secondary bg-secondary/5 shadow-sm'
-                                            : 'border-gray-200 bg-white hover:border-gray-300'
+                                        className={`cursor-pointer p-2.5 sm:p-4 rounded-lg border transition-all ${selectedPaymentMethod === method.id
+                                            ? 'border-brand/60 bg-muted/40'
+                                            : 'border-card-edge bg-card-fill hover:border-card-edge-hover'
                                             }`}
                                     >
                                         <div className="flex items-center gap-2.5 md:gap-3">
@@ -423,7 +423,7 @@ const Checkout = ({ onSuccess, onBack }) => {
 
                 {/* Order Summary & Place Order */}
                 {currentStep >= 2 && (
-                    <div className="bg-gray-50 border border-gray-200 p-3 md:p-5 rounded-lg shadow-sm">
+                    <div className="card-chai p-4 sm:p-6">
                         <div className="space-y-2 md:space-y-2.5">
                             <div className="flex justify-between text-gray-700 text-sm md:text-base">
                                 <span>Items Total:</span>
@@ -475,24 +475,24 @@ const Checkout = ({ onSuccess, onBack }) => {
 
                             {/* Total Amount */}
                             <div className="border-t border-gray-300 pt-2 md:pt-2.5 flex justify-between font-semibold text-base md:text-xl">
-                                <span className="text-gray-800">Total Amount:</span>
-                                <span className="text-secondary text-lg md:text-2xl font-bold">₹{calculateCharges().totalAmount}</span>
+                                <span className="text-foreground">Total amount:</span>
+                                <span className="font-montserrat text-lg sm:text-xl font-bold text-foreground">₹{calculateCharges().totalAmount}</span>
                             </div>
 
                             {/* Savings Message */}
                             {calculateCharges().itemsTotal >= 300 && (
-                                <div className="bg-green-50 border border-green-300 rounded-lg p-2 text-center">
-                                    <p className="text-green-700 text-xs md:text-sm font-medium">
-                                        🎉 You saved ₹38 on delivery charges!
+                                <div className="border border-emerald-500/20 bg-emerald-500/10 rounded-lg p-2.5 text-center">
+                                    <p className="text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-medium">
+                                        You saved ₹38 on delivery charges
                                     </p>
                                 </div>
                             )}
 
                             {/* Minimum Order Message */}
                             {calculateCharges().itemsTotal < 300 && (
-                                <div className="bg-orange-50 border border-orange-300 rounded-lg p-2 text-center">
-                                    <p className="text-orange-700 text-xs md:text-sm font-medium">
-                                        💡 Add ₹{(300 - calculateCharges().itemsTotal).toFixed(2)} more to get FREE delivery!
+                                <div className="border border-card-edge bg-card-fill rounded-lg p-2.5 text-center">
+                                    <p className="text-muted-foreground text-xs sm:text-sm font-medium">
+                                        Add ₹{(300 - calculateCharges().itemsTotal).toFixed(2)} more to get free delivery
                                     </p>
                                 </div>
                             )}
@@ -501,9 +501,9 @@ const Checkout = ({ onSuccess, onBack }) => {
                         <button
                             onClick={handlePlaceOrder}
                             disabled={loading || !selectedPaymentMethod}
-                            className={`w-full text-sm md:text-lg py-3 md:py-4 mt-3 md:mt-5 rounded-lg font-semibold transition-all ${loading || !selectedPaymentMethod
-                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                : 'btn-secondary hover:scale-105'
+                            className={`btn-asym inline-flex h-11 w-full items-center justify-center gap-2 mt-4 text-sm sm:text-base font-semibold transition-all ${loading || !selectedPaymentMethod
+                                ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                                : 'bg-neutral-900 text-white dark:bg-white dark:text-black hover:bg-black/90 dark:hover:bg-neutral-200'
                                 }`}
                         >
                             {loading ? (
@@ -515,7 +515,7 @@ const Checkout = ({ onSuccess, onBack }) => {
                                     Processing...
                                 </span>
                             ) : (
-                                '🔒 Place Order'
+                                'Place order'
                             )}
                         </button>
 

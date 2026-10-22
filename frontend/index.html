@@ -1,16 +1,32 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/src/public/images/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>K Mondal Store - Your Local Kirana Store</title>
+    <title>K Mondal Store | Local Kirana in Banarhat</title>
+    <!-- Google Fonts: Manrope, Montserrat, Onest, Geist Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Manrope:wght@200..800&family=Montserrat:wght@400..800&family=Onest:wght@400..700&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('chaiui-theme') || 'dark';
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 
-<body>
+<body class="bg-background text-foreground font-sans antialiased selection:bg-brand/20">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 </body>
 
-</html>
+</html>

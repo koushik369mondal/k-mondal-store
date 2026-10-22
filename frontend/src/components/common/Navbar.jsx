@@ -2,9 +2,9 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
-import { Search, X, Menu } from 'lucide-react';
+import { Search, X, Menu, ShoppingCart, User, Package, MapPin, HelpCircle, LogOut, Shield } from 'lucide-react';
 import SearchBar from './SearchBar';
-import groceryIcon from '../../public/images/cart.png';
+import ThemeSwitcher from './ThemeSwitcher';
 import logo from '../../public/images/logo.png';
 
 const Navbar = () => {
@@ -12,31 +12,35 @@ const Navbar = () => {
     const { cart } = useContext(CartContext);
     const location = useLocation();
     const navigate = useNavigate();
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [scrolled, setScrolled] = useState(false);
     const searchInputRef = useRef(null);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 12);
+        };
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-        // Close search when opening menu
-        if (!isMenuOpen) {
-            setIsSearchOpen(false);
-        }
+        setIsMenuOpen(prev => !prev);
+        if (!isMenuOpen) setIsSearchOpen(false);
     };
 
-    const closeMenu = () => {
-        setIsMenuOpen(false);
-    };
+    const closeMenu = () => setIsMenuOpen(false);
 
     const toggleUserDropdown = () => {
-        setIsUserDropdownOpen(!isUserDropdownOpen);
+        setIsUserDropdownOpen(prev => !prev);
     };
 
-    const closeUserDropdown = () => {
-        setIsUserDropdownOpen(false);
-    };
+    const closeUserDropdown = () => setIsUserDropdownOpen(false);
 
     const handleLogout = () => {
         logout();
@@ -44,14 +48,10 @@ const Navbar = () => {
         closeMenu();
     };
 
-    // Search functions
     const openSearch = () => {
         setIsSearchOpen(true);
         setIsMenuOpen(false);
-        // Focus input after state updates
-        setTimeout(() => {
-            searchInputRef.current?.focus();
-        }, 100);
+        setTimeout(() => searchInputRef.current?.focus(), 100);
     };
 
     const closeSearch = () => {
@@ -61,8 +61,6 @@ const Navbar = () => {
 
     const handleSearch = (value) => {
         setSearchQuery(value);
-
-        // Update URL with search query
         if (value.trim()) {
             const newParams = new URLSearchParams({ q: value.trim() });
             if (location.pathname === '/search') {
@@ -71,7 +69,6 @@ const Navbar = () => {
                 navigate(`/?${newParams.toString()}`, { replace: true });
             }
         } else {
-            // Clear search if empty
             if (location.pathname === '/search') {
                 navigate('/search', { replace: true });
             } else {
@@ -80,29 +77,34 @@ const Navbar = () => {
         }
     };
 
-    // Initialize search query from URL
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const q = params.get('q') || '';
-        setSearchQuery(q);
+        setSearchQuery(params.get('q') || '');
     }, [location.search]);
 
+    const totalCartCount = cart?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
+
     return (
-        <nav className="bg-primary text-cream shadow-premium-lg sticky top-0 z-50">
-            {/* Top Navbar Section */}
-            <div className="container mx-auto px-4 py-3">
+        <header
+            className={`sticky top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300 ${
+                scrolled
+                    ? 'bg-background/80 backdrop-blur-md border-b border-border/40'
+                    : 'bg-transparent border-b border-transparent'
+            }`}
+        >
+            <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-3">
                 {isSearchOpen ? (
-                    /* Search Mode - Full Width Search Bar */
-                    <div className="flex items-center gap-3 animate-fadeIn">
-                        <div className="flex-1 flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border-2 border-primary shadow-lg">
-                            <Search className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    /* Mobile Search Mode */
+                    <div className="flex items-center gap-2">
+                        <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg border border-card-edge bg-background/90 backdrop-blur-md">
+                            <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                             <input
                                 ref={searchInputRef}
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => handleSearch(e.target.value)}
-                                placeholder="Search for products, brands, categories..."
-                                className="flex-1 outline-none text-sm md:text-base text-gray-700 placeholder-gray-400 bg-transparent"
+                                placeholder="Search products, brands, categories..."
+                                className="flex-1 outline-none text-sm text-foreground placeholder:text-muted-foreground bg-transparent"
                             />
                             {searchQuery && (
                                 <button
@@ -111,227 +113,301 @@ const Navbar = () => {
                                         handleSearch('');
                                         searchInputRef.current?.focus();
                                     }}
-                                    className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+                                    className="p-1 text-muted-foreground hover:text-foreground"
                                     aria-label="Clear search"
                                 >
-                                    <X className="w-4 h-4 text-gray-500" />
+                                    <X className="w-4 h-4" />
                                 </button>
                             )}
                         </div>
                         <button
                             onClick={closeSearch}
-                            className="p-2 hover:bg-primary-light rounded-full transition-colors"
+                            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                             aria-label="Close search"
                         >
-                            <X className="w-6 h-6 text-cream" />
+                            <X className="w-5 h-5" />
                         </button>
                     </div>
                 ) : (
-                    /* Normal Mode - Logo, Brand, Search Icon, Hamburger */
-                    <div className="flex justify-between items-center">
-                        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity flex-1 min-w-0" onClick={closeMenu}>
-                            <img src={logo} alt="K Mondal Store Logo" className="w-10 h-10 md:w-12 md:h-12 drop-shadow-lg flex-shrink-0" />
-                            <div className="flex flex-col min-w-0">
-                                <span className="text-lg md:text-xl font-bold text-secondary hover:text-secondary-light transition-colors leading-tight truncate">
+                    /* Normal Header Bar */
+                    <nav className="flex items-center justify-between gap-4 sm:gap-6">
+                        {/* Brand Logo & Name */}
+                        <Link
+                            to="/"
+                            className="flex items-center gap-2.5 group hover:opacity-95 transition-opacity flex-shrink-0"
+                            onClick={closeMenu}
+                        >
+                            <img
+                                src={logo}
+                                alt="K Mondal Store"
+                                className="w-8 h-8 sm:w-9 sm:h-9 object-contain flex-shrink-0 rounded-md"
+                            />
+                            <div className="flex flex-col">
+                                <span className="font-brand font-medium text-base sm:text-lg tracking-tight text-foreground group-hover:text-brand transition-colors">
                                     K Mondal Store
                                 </span>
-                                <span className="text-[9px] md:text-[10px] text-cream/70 font-normal leading-tight truncate">
+                                <span className="text-[10px] sm:text-[11px] text-muted-foreground font-normal -mt-0.5">
                                     Owned by Kamakhya Mandal
                                 </span>
                             </div>
                         </Link>
 
-                        {/* Desktop Menu */}
-                        <div className="hidden md:flex items-center gap-6">
-                            {/* Desktop Search Bar */}
-                            <SearchBar className="w-96" />
+                        {/* Desktop Search Bar - Fills the space nicely */}
+                        <div className="hidden md:block flex-1 max-w-xl lg:max-w-3xl xl:max-w-4xl mx-4 lg:mx-8">
+                            <SearchBar />
+                        </div>
 
-                            <Link to="/" className="text-cream hover:text-secondary transition-colors font-medium whitespace-nowrap">Home</Link>
+                        {/* Desktop Navigation Links & Actions */}
+                        <div className="hidden md:flex items-center gap-5">
+                            <Link
+                                to="/"
+                                className={`text-sm font-medium transition-colors hover:text-brand ${
+                                    location.pathname === '/' ? 'text-foreground font-semibold' : 'text-muted-foreground'
+                                }`}
+                            >
+                                Home
+                            </Link>
 
                             {user && user.role === 'admin' && (
-                                <Link to="/admin" className="text-cream hover:text-secondary transition-colors font-medium whitespace-nowrap">Admin</Link>
+                                <Link
+                                    to="/admin"
+                                    className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-brand transition-colors"
+                                >
+                                    <Shield className="w-4 h-4" />
+                                    Admin
+                                </Link>
                             )}
 
-                            <Link to="/cart" className="relative hover:scale-110 transition-transform flex items-center gap-1">
-                                <img src={groceryIcon} alt="Cart" className="w-8 h-8 drop-shadow-lg" />
-                                {cart.length > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg">
-                                        {cart.length}
+                            {/* Cart Link */}
+                            <Link
+                                to="/cart"
+                                aria-label="View cart"
+                                className="relative inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-brand transition-colors"
+                            >
+                                <ShoppingCart className="w-5 h-5" />
+                                {totalCartCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 px-1.5 min-w-[1.125rem] h-4.5 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold flex items-center justify-center border border-card-edge">
+                                        {totalCartCount}
                                     </span>
                                 )}
                             </Link>
 
+                            {/* Theme Switcher */}
+                            <ThemeSwitcher />
+
+                            {/* User Profile / Auth */}
                             {user ? (
                                 <div className="relative">
                                     <button
                                         onClick={toggleUserDropdown}
-                                        className="flex items-center gap-2 bg-primary-light hover:bg-primary text-cream px-5 py-2.5 rounded-xl transition-all duration-300 font-semibold shadow-md hover:shadow-lg whitespace-nowrap"
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg border border-card-edge bg-card-fill hover:border-card-edge-hover transition-colors text-foreground"
                                     >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                        <span>{user.name}</span>
-                                        <svg className={`w-4 h-4 transition-transform duration-300 ${isUserDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
+                                        <User className="w-4 h-4 text-muted-foreground" />
+                                        <span className="max-w-[120px] truncate">{user.name}</span>
                                     </button>
 
-                                    {/* Dropdown Menu */}
+                                    {/* User Dropdown */}
                                     {isUserDropdownOpen && (
-                                        <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-premium-lg border-2 border-cream-dark z-50">
-                                            <div className="py-2">
-                                                <Link
-                                                    to="/orders"
-                                                    onClick={closeUserDropdown}
-                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-cream transition-colors text-charcoal font-medium"
-                                                >
-                                                    <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                                    </svg>
-                                                    My Orders
-                                                </Link>
-                                                <Link
-                                                    to="/profile"
-                                                    onClick={closeUserDropdown}
-                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-cream transition-colors text-charcoal font-medium"
-                                                >
-                                                    <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                    </svg>
-                                                    My Profile
-                                                </Link>
-                                                <Link
-                                                    to="/addresses"
-                                                    onClick={closeUserDropdown}
-                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-cream transition-colors text-charcoal font-medium"
-                                                >
-                                                    <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    </svg>
-                                                    Saved Addresses
-                                                </Link>
-                                                <Link
-                                                    to="/support"
-                                                    onClick={closeUserDropdown}
-                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-cream transition-colors text-charcoal font-medium"
-                                                >
-                                                    <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                    </svg>
-                                                    Support
-                                                </Link>
-                                                <div className="border-t border-cream-dark my-2"></div>
-                                                <button
-                                                    onClick={handleLogout}
-                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors text-red-600 font-medium w-full text-left"
-                                                >
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                                    </svg>
-                                                    Logout
-                                                </button>
+                                        <div className="absolute right-0 mt-2 w-52 rounded-lg border border-gray-400/20 bg-background/95 p-1.5 backdrop-blur-lg dark:border-orange-50/10 z-50">
+                                            <div className="px-3 py-2 border-b border-border/40 text-xs text-muted-foreground">
+                                                Signed in as <span className="font-semibold text-foreground block truncate">{user.name}</span>
                                             </div>
+                                            <Link
+                                                to="/orders"
+                                                onClick={closeUserDropdown}
+                                                className="flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:text-brand transition-colors rounded-md hover:bg-muted/50"
+                                            >
+                                                <Package className="w-4 h-4 text-muted-foreground" />
+                                                My orders
+                                            </Link>
+                                            <Link
+                                                to="/profile"
+                                                onClick={closeUserDropdown}
+                                                className="flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:text-brand transition-colors rounded-md hover:bg-muted/50"
+                                            >
+                                                <User className="w-4 h-4 text-muted-foreground" />
+                                                My profile
+                                            </Link>
+                                            <Link
+                                                to="/addresses"
+                                                onClick={closeUserDropdown}
+                                                className="flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:text-brand transition-colors rounded-md hover:bg-muted/50"
+                                            >
+                                                <MapPin className="w-4 h-4 text-muted-foreground" />
+                                                Saved addresses
+                                            </Link>
+                                            <Link
+                                                to="/support"
+                                                onClick={closeUserDropdown}
+                                                className="flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:text-brand transition-colors rounded-md hover:bg-muted/50"
+                                            >
+                                                <HelpCircle className="w-4 h-4 text-muted-foreground" />
+                                                Support
+                                            </Link>
+                                            <div className="border-t border-border/40 my-1"></div>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="flex items-center gap-2.5 px-3 py-2 text-sm text-red-500 hover:text-red-400 transition-colors w-full text-left rounded-md hover:bg-red-500/10"
+                                            >
+                                                <LogOut className="w-4 h-4" />
+                                                Sign out
+                                            </button>
                                         </div>
                                     )}
                                 </div>
                             ) : (
-                                <div className="flex items-center gap-3">
-                                    <Link to="/login" className="bg-secondary hover:bg-secondary-light px-6 py-2.5 rounded-xl transition-all duration-300 font-semibold shadow-md hover:shadow-lg whitespace-nowrap">Login</Link>
-                                    <Link to="/signup" className="bg-cream hover:bg-cream-dark text-primary px-6 py-2.5 rounded-xl transition-all duration-300 font-semibold shadow-md hover:shadow-lg whitespace-nowrap">Sign Up</Link>
+                                <div className="flex items-center gap-2">
+                                    <Link
+                                        to="/login"
+                                        className="text-sm font-medium px-3 py-1.5 rounded-md text-foreground hover:text-brand transition-colors"
+                                    >
+                                        Sign in
+                                    </Link>
+                                    <Link
+                                        to="/signup"
+                                        className="text-sm font-medium px-3.5 py-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                    >
+                                        Register
+                                    </Link>
                                 </div>
                             )}
                         </div>
 
-                        {/* Mobile Icons - Search Icon + Hamburger Menu */}
-                        <div className="md:hidden flex items-center gap-3">
-                            {/* Search Icon */}
+                        {/* Mobile Actions: Search, Cart, Theme, Hamburger */}
+                        <div className="md:hidden flex items-center gap-1.5">
                             <button
                                 onClick={openSearch}
-                                className="p-2 hover:bg-primary-light rounded-full transition-colors"
+                                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                                 aria-label="Open search"
                             >
-                                <Search className="w-5 h-5 text-cream" />
+                                <Search className="w-5 h-5" />
                             </button>
 
-                            {/* Hamburger Menu */}
-                            <button
-                                className="p-2 hover:bg-primary-light rounded-full transition-colors"
-                                onClick={toggleMenu}
-                                aria-label="Toggle menu"
+                            <Link
+                                to="/cart"
+                                aria-label="View cart"
+                                className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
                             >
-                                <Menu className="w-6 h-6 text-cream" />
+                                <ShoppingCart className="w-5 h-5" />
+                                {totalCartCount > 0 && (
+                                    <span className="absolute top-1 right-1 px-1 min-w-[1rem] h-4 rounded-full bg-primary text-primary-foreground text-[9px] font-semibold flex items-center justify-center border border-card-edge">
+                                        {totalCartCount}
+                                    </span>
+                                )}
+                            </Link>
+
+                            <ThemeSwitcher />
+
+                            <button
+                                onClick={toggleMenu}
+                                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                                aria-label="Toggle navigation menu"
+                            >
+                                {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                             </button>
                         </div>
-                    </div>
+                    </nav>
                 )}
             </div>
 
-            {/* Mobile Menu */}
-            <div className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-col gap-3 py-4 border-t border-cream/20">
-                        <Link to="/" className="text-cream hover:text-secondary transition-colors font-medium px-3 py-2 hover:bg-primary-light rounded-lg" onClick={closeMenu}>Home</Link>
+            {/* Mobile Dropdown Menu */}
+            {isMenuOpen && (
+                <div className="md:hidden border-t border-card-edge bg-background/95 backdrop-blur-xl px-4 py-4 space-y-3">
+                    <Link
+                        to="/"
+                        onClick={closeMenu}
+                        className="block text-sm font-medium text-foreground hover:text-brand px-2 py-1.5 rounded-md"
+                    >
+                        Home
+                    </Link>
 
-                        {user && user.role === 'admin' && (
-                            <Link to="/admin" className="text-cream hover:text-secondary transition-colors font-medium px-3 py-2 hover:bg-primary-light rounded-lg" onClick={closeMenu}>Admin</Link>
-                        )}
-
-                        <Link to="/cart" className="hover:text-secondary transition-colors text-left flex items-center gap-2 px-3 py-2 font-medium text-cream hover:bg-primary-light rounded-lg" onClick={closeMenu}>
-                            <img src={groceryIcon} alt="Cart" className="w-6 h-6" />
-                            Cart ({cart.length})
+                    {user && user.role === 'admin' && (
+                        <Link
+                            to="/admin"
+                            onClick={closeMenu}
+                            className="block text-sm font-medium text-foreground hover:text-brand px-2 py-1.5 rounded-md"
+                        >
+                            Admin portal
                         </Link>
+                    )}
 
-                        {user ? (
-                            <>
-                                <div className="text-secondary font-semibold px-3 py-2 border-b border-cream/20 mt-2">
-                                    Hello, {user.name}
-                                </div>
-                                <Link to="/orders" className="text-cream hover:text-secondary transition-colors font-medium px-3 py-2 flex items-center gap-2 hover:bg-primary-light rounded-lg" onClick={closeMenu}>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                    </svg>
-                                    My Orders
-                                </Link>
-                                <Link to="/profile" className="text-cream hover:text-secondary transition-colors font-medium px-3 py-2 flex items-center gap-2 hover:bg-primary-light rounded-lg" onClick={closeMenu}>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                    My Profile
-                                </Link>
-                                <Link to="/addresses" className="text-cream hover:text-secondary transition-colors font-medium px-3 py-2 flex items-center gap-2 hover:bg-primary-light rounded-lg" onClick={closeMenu}>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    Saved Addresses
-                                </Link>
-                                <Link to="/support" className="text-cream hover:text-secondary transition-colors font-medium px-3 py-2 flex items-center gap-2 hover:bg-primary-light rounded-lg" onClick={closeMenu}>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    Support
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="bg-red-600 hover:bg-red-700 px-4 py-2.5 rounded-xl transition-all duration-300 text-center font-semibold shadow-md flex items-center justify-center gap-2 mt-2"
-                                >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Logout
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <Link to="/login" className="bg-secondary hover:bg-secondary-light px-4 py-2.5 rounded-xl transition-all duration-300 text-center font-semibold shadow-md mt-2" onClick={closeMenu}>Login</Link>
-                                <Link to="/signup" className="bg-cream hover:bg-cream-dark text-primary px-4 py-2.5 rounded-xl transition-all duration-300 text-center font-semibold shadow-md" onClick={closeMenu}>Sign Up</Link>
-                            </>
-                        )}
-                    </div>
+                    <Link
+                        to="/cart"
+                        onClick={closeMenu}
+                        className="flex items-center justify-between text-sm font-medium text-foreground hover:text-brand px-2 py-1.5 rounded-md"
+                    >
+                        <span>Cart</span>
+                        <span className="text-xs px-2 py-0.5 rounded-full border border-card-edge bg-muted text-foreground">
+                            {totalCartCount} items
+                        </span>
+                    </Link>
+
+                    {user ? (
+                        <div className="pt-2 border-t border-border/40 space-y-1">
+                            <div className="px-2 py-1 text-xs text-muted-foreground">
+                                Signed in as <span className="font-semibold text-foreground">{user.name}</span>
+                            </div>
+                            <Link
+                                to="/orders"
+                                onClick={closeMenu}
+                                className="flex items-center gap-2 text-sm text-foreground hover:text-brand px-2 py-1.5 rounded-md"
+                            >
+                                <Package className="w-4 h-4 text-muted-foreground" />
+                                My orders
+                            </Link>
+                            <Link
+                                to="/profile"
+                                onClick={closeMenu}
+                                className="flex items-center gap-2 text-sm text-foreground hover:text-brand px-2 py-1.5 rounded-md"
+                            >
+                                <User className="w-4 h-4 text-muted-foreground" />
+                                My profile
+                            </Link>
+                            <Link
+                                to="/addresses"
+                                onClick={closeMenu}
+                                className="flex items-center gap-2 text-sm text-foreground hover:text-brand px-2 py-1.5 rounded-md"
+                            >
+                                <MapPin className="w-4 h-4 text-muted-foreground" />
+                                Saved addresses
+                            </Link>
+                            <Link
+                                to="/support"
+                                onClick={closeMenu}
+                                className="flex items-center gap-2 text-sm text-foreground hover:text-brand px-2 py-1.5 rounded-md"
+                            >
+                                <HelpCircle className="w-4 h-4 text-muted-foreground" />
+                                Support
+                            </Link>
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-2 text-sm text-red-500 hover:text-red-400 px-2 py-1.5 rounded-md w-full text-left"
+                            >
+                                <LogOut className="w-4 h-4" />
+                                Sign out
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="pt-2 border-t border-border/40 flex items-center gap-3">
+                            <Link
+                                to="/login"
+                                onClick={closeMenu}
+                                className="flex-1 text-center text-sm font-medium py-2 rounded-md border border-card-edge bg-card-fill text-foreground hover:border-card-edge-hover"
+                            >
+                                Sign in
+                            </Link>
+                            <Link
+                                to="/signup"
+                                onClick={closeMenu}
+                                className="flex-1 text-center text-sm font-medium py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    )}
                 </div>
-            </div>
-        </nav>
+            )}
+        </header>
     );
 };
 

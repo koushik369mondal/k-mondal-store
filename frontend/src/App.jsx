@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CacheWarmer from './components/common/CacheWarmer';
 import Chatbot from './components/common/Chatbot';
 import BottomCartBar from './components/common/BottomCartBar';
+import Backdrop from './components/common/Backdrop';
 import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
@@ -18,22 +19,11 @@ import SavedAddressesPage from './pages/SavedAddressesPage';
 import SupportPage from './pages/SupportPage';
 
 function App() {
-    // Auto-refresh functionality - triggers once on initial page load
-    useEffect(() => {
-        const hasRefreshed = sessionStorage.getItem('hasRefreshed');
-
-        if (!hasRefreshed) {
-            // Mark as refreshed to prevent continuous loops
-            sessionStorage.setItem('hasRefreshed', 'true');
-            // Reload the page
-            window.location.reload();
-        }
-    }, []);
-
     return (
         <Router>
             <CacheWarmer />
-            <div className="flex flex-col min-h-screen">
+            <div className="relative isolate min-h-screen overflow-x-clip bg-background text-foreground flex flex-col">
+                <Backdrop />
                 <Navbar />
                 <main className="flex-grow">
                     <Routes>
@@ -61,3 +51,4 @@ function App() {
 }
 
 export default App;
+

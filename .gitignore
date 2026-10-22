@@ -47,8 +47,21 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# Production build outputs
+dist/
+dist-ssr/
+frontend/dist/
+build/
+*.tsbuildinfo
+
+# dotenv environment variables files
 .env
+.env.*
+*.env
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
 .env.local
 .env.development.local
 .env.test.local

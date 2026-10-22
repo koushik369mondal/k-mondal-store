@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/common/Loader';
+import { User, Mail, Shield, KeyRound, ArrowUpRight } from 'lucide-react';
 
 const MyProfilePage = () => {
     const { user, loading, updateProfile } = useContext(AuthContext);
@@ -19,13 +20,8 @@ const MyProfilePage = () => {
         confirmPassword: ''
     });
 
-    if (loading) {
-        return <Loader />;
-    }
-
-    if (!user) {
-        return <Navigate to="/login" />;
-    }
+    if (loading) return <Loader />;
+    if (!user) return <Navigate to="/login" />;
 
     const handleEdit = () => {
         setFormData({
@@ -73,6 +69,11 @@ const MyProfilePage = () => {
         }
 
         if (showPasswordSection) {
+            if (!formData.currentPassword) {
+                setError('Current password is required to change password');
+                return false;
+            }
+
             if (!formData.newPassword) {
                 setError('New password is required');
                 return false;
@@ -84,12 +85,7 @@ const MyProfilePage = () => {
             }
 
             if (formData.newPassword !== formData.confirmPassword) {
-                setError('Passwords do not match');
-                return false;
-            }
-
-            if (!formData.currentPassword) {
-                setError('Current password is required to change password');
+                setError('New passwords do not match');
                 return false;
             }
         }
@@ -102,16 +98,13 @@ const MyProfilePage = () => {
         setError('');
         setSuccess('');
 
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setIsSaving(true);
-
         try {
             const updateData = {
-                name: formData.name,
-                email: formData.email
+                name: formData.name.trim(),
+                email: formData.email.trim()
             };
 
             if (showPasswordSection && formData.newPassword) {
@@ -119,20 +112,10 @@ const MyProfilePage = () => {
                 updateData.newPassword = formData.newPassword;
             }
 
-            const response = await updateProfile(updateData);
-            setSuccess(response.message || 'Profile updated successfully!');
+            await updateProfile(updateData);
+            setSuccess('Profile updated successfully');
             setIsEditing(false);
             setShowPasswordSection(false);
-            setFormData({
-                name: '',
-                email: '',
-                currentPassword: '',
-                newPassword: '',
-                confirmPassword: ''
-            });
-
-            // Clear success message after 3 seconds
-            setTimeout(() => setSuccess(''), 3000);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to update profile');
         } finally {
@@ -149,134 +132,148 @@ const MyProfilePage = () => {
     };
 
     return (
-        <div className="container mx-auto px-2 py-4 md:px-6 md:py-8 min-h-screen">
-            <div className="card max-w-3xl mx-auto border border-cream-dark">
-                <div className="flex justify-between items-center mb-8 border-b-2 border-secondary pb-4">
-                    <h1 className="text-4xl font-bold text-charcoal">
-                        My Profile
+        <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+            <div className="flex items-center justify-between border-b border-card-edge pb-4">
+                <div>
+                    <h1 className="font-montserrat text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">
+                        My profile
                     </h1>
-                    {!isEditing && (
-                        <button
-                            onClick={handleEdit}
-                            className="btn-secondary px-6 py-2 text-sm"
-                        >
-                            Edit Profile
-                        </button>
-                    )}
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                        Manage your account settings and credentials
+                    </p>
                 </div>
-
-                {error && (
-                    <div className="bg-red-50 border-2 border-red-500 text-red-700 px-6 py-4 rounded-xl mb-6">
-                        <p className="font-semibold">{error}</p>
-                    </div>
+                {!isEditing && (
+                    <button
+                        onClick={handleEdit}
+                        className="btn-asym inline-flex h-9 items-center gap-2 bg-neutral-900 px-4 text-xs sm:text-sm font-medium text-white transition-colors hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
+                    >
+                        Edit profile
+                    </button>
                 )}
+            </div>
 
-                {success && (
-                    <div className="bg-green-50 border-2 border-green-500 text-green-700 px-6 py-4 rounded-xl mb-6">
-                        <p className="font-semibold">{success}</p>
+            {error && (
+                <div className="p-3.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-500 text-xs sm:text-sm">
+                    {error}
+                </div>
+            )}
+
+            {success && (
+                <div className="p-3.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm">
+                    {success}
+                </div>
+            )}
+
+            {!isEditing ? (
+                <div className="card-chai p-6 sm:p-8 space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                <User className="w-3.5 h-3.5" /> Full name
+                            </span>
+                            <p className="font-montserrat text-base font-semibold text-foreground">{user.name}</p>
+                        </div>
+
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                <Mail className="w-3.5 h-3.5" /> Email address
+                            </span>
+                            <p className="font-montserrat text-base font-semibold text-foreground">{user.email}</p>
+                        </div>
+
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                <Shield className="w-3.5 h-3.5" /> Role
+                            </span>
+                            <p className="font-montserrat text-base font-semibold text-foreground capitalize">{user.role}</p>
+                        </div>
                     </div>
-                )}
-
-                {!isEditing ? (
-                    <div className="space-y-6">
-                        <div className="bg-cream rounded-xl p-6">
-                            <label className="block text-sm font-semibold text-gray-600 mb-2">Full Name</label>
-                            <p className="text-xl font-bold text-charcoal">{user.name}</p>
-                        </div>
-
-                        <div className="bg-cream rounded-xl p-6">
-                            <label className="block text-sm font-semibold text-gray-600 mb-2">Email Address</label>
-                            <p className="text-xl font-bold text-charcoal">{user.email}</p>
-                        </div>
-
-                        <div className="bg-cream rounded-xl p-6">
-                            <label className="block text-sm font-semibold text-gray-600 mb-2">Account Type</label>
-                            <p className="text-xl font-bold text-charcoal capitalize">{user.role}</p>
-                        </div>
-                    </div>
-                ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Full Name <span className="text-red-500">*</span>
+                </div>
+            ) : (
+                <div className="card-chai p-6 sm:p-8">
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-1.5">
+                            <label className="block text-xs font-medium text-foreground">
+                                Full name
                             </label>
                             <input
                                 type="text"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-secondary transition-colors"
-                                placeholder="Enter your full name"
+                                className="w-full px-3.5 py-2 rounded-lg border border-card-edge bg-card-fill text-sm text-foreground focus:outline-none focus:border-brand/70"
+                                placeholder="Enter full name"
                                 disabled={isSaving}
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Email Address <span className="text-red-500">*</span>
+                        <div className="space-y-1.5">
+                            <label className="block text-xs font-medium text-foreground">
+                                Email address
                             </label>
                             <input
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-secondary transition-colors"
-                                placeholder="Enter your email"
+                                className="w-full px-3.5 py-2 rounded-lg border border-card-edge bg-card-fill text-sm text-foreground focus:outline-none focus:border-brand/70"
+                                placeholder="Enter email"
                                 disabled={isSaving}
                             />
                         </div>
 
-                        <div className="border-t-2 border-gray-200 pt-6">
+                        <div className="pt-2 border-t border-card-edge">
                             <button
                                 type="button"
                                 onClick={() => setShowPasswordSection(!showPasswordSection)}
-                                className="text-secondary font-semibold hover:text-primary transition-colors mb-4"
+                                className="text-xs font-medium text-brand hover:underline inline-flex items-center gap-1.5"
                             >
-                                {showPasswordSection ? '− Hide' : '+ Change'} Password
+                                <KeyRound className="w-3.5 h-3.5" />
+                                {showPasswordSection ? 'Hide password change' : 'Change password'}
                             </button>
 
                             {showPasswordSection && (
-                                <div className="space-y-4 bg-cream rounded-xl p-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Current Password <span className="text-red-500">*</span>
+                                <div className="mt-4 p-4 rounded-lg border border-card-edge bg-muted/20 space-y-4">
+                                    <div className="space-y-1.5">
+                                        <label className="block text-xs font-medium text-foreground">
+                                            Current password
                                         </label>
                                         <input
                                             type="password"
                                             name="currentPassword"
                                             value={formData.currentPassword}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-secondary transition-colors"
-                                            placeholder="Enter current password"
+                                            className="w-full px-3.5 py-2 rounded-lg border border-card-edge bg-card-fill text-sm text-foreground focus:outline-none focus:border-brand/70"
+                                            placeholder="Current password"
                                             disabled={isSaving}
                                         />
                                     </div>
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            New Password <span className="text-red-500">*</span>
+                                    <div className="space-y-1.5">
+                                        <label className="block text-xs font-medium text-foreground">
+                                            New password
                                         </label>
                                         <input
                                             type="password"
                                             name="newPassword"
                                             value={formData.newPassword}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-secondary transition-colors"
-                                            placeholder="Enter new password (min. 6 characters)"
+                                            className="w-full px-3.5 py-2 rounded-lg border border-card-edge bg-card-fill text-sm text-foreground focus:outline-none focus:border-brand/70"
+                                            placeholder="Min. 6 characters"
                                             disabled={isSaving}
                                         />
                                     </div>
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Confirm New Password <span className="text-red-500">*</span>
+                                    <div className="space-y-1.5">
+                                        <label className="block text-xs font-medium text-foreground">
+                                            Confirm new password
                                         </label>
                                         <input
                                             type="password"
                                             name="confirmPassword"
                                             value={formData.confirmPassword}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-secondary transition-colors"
+                                            className="w-full px-3.5 py-2 rounded-lg border border-card-edge bg-card-fill text-sm text-foreground focus:outline-none focus:border-brand/70"
                                             placeholder="Confirm new password"
                                             disabled={isSaving}
                                         />
@@ -285,26 +282,27 @@ const MyProfilePage = () => {
                             )}
                         </div>
 
-                        <div className="flex gap-4 pt-4">
+                        <div className="flex items-center gap-3 pt-3">
                             <button
                                 type="submit"
                                 disabled={isSaving}
-                                className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="btn-asym inline-flex h-9 items-center justify-center gap-2 bg-neutral-900 px-6 text-sm font-medium text-white transition-colors hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-neutral-200 disabled:opacity-50"
                             >
-                                {isSaving ? 'Saving...' : 'Save Changes'}
+                                <span>{isSaving ? 'Saving...' : 'Save changes'}</span>
+                                <ArrowUpRight className="w-4 h-4" />
                             </button>
                             <button
                                 type="button"
                                 onClick={handleCancel}
                                 disabled={isSaving}
-                                className="btn-secondary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="btn-asym-mirror inline-flex h-9 items-center justify-center px-5 text-sm font-medium border border-border text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
                             >
                                 Cancel
                             </button>
                         </div>
                     </form>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 };

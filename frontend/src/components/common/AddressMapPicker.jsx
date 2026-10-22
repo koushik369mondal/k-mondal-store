@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Map, { Marker, NavigationControl, GeolocateControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { MapPin } from 'lucide-react';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -18,6 +19,7 @@ const AddressMapPicker = ({ onLocationSelect, initialLocation }) => {
 
     // Reverse geocode to get address from coordinates
     const reverseGeocode = async (lat, lng) => {
+        if (!MAPBOX_TOKEN) return null;
         setLoading(true);
         try {
             const response = await fetch(
@@ -136,15 +138,24 @@ const AddressMapPicker = ({ onLocationSelect, initialLocation }) => {
                 )}
             </div>
 
-            <div className="relative rounded-2xl overflow-hidden border-2 border-cream-dark shadow-lg" style={{ height: '400px' }}>
-                <Map
-                    {...viewport}
-                    onMove={evt => setViewport(evt.viewState)}
-                    onClick={handleMapClick}
-                    mapStyle="mapbox://styles/mapbox/streets-v12"
-                    mapboxAccessToken={MAPBOX_TOKEN}
-                    style={{ width: '100%', height: '100%' }}
-                >
+            {!MAPBOX_TOKEN ? (
+                <div className="rounded-xl border border-dashed border-card-edge p-8 text-center space-y-2 bg-muted/10">
+                    <MapPin className="w-8 h-8 mx-auto text-muted-foreground stroke-1" />
+                    <p className="text-sm font-medium text-foreground">Interactive map preview is disabled</p>
+                    <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                        Add a valid VITE_MAPBOX_TOKEN to your environment to enable pin dropping. You can still enter your address manually.
+                    </p>
+                </div>
+            ) : (
+                <div className="relative rounded-2xl overflow-hidden border-2 border-cream-dark shadow-lg" style={{ height: '400px' }}>
+                    <Map
+                        {...viewport}
+                        onMove={evt => setViewport(evt.viewState)}
+                        onClick={handleMapClick}
+                        mapStyle="mapbox://styles/mapbox/streets-v12"
+                        mapboxAccessToken={MAPBOX_TOKEN}
+                        style={{ width: '100%', height: '100%' }}
+                    >
                     {marker && (
                         <Marker
                             latitude={marker.latitude}
@@ -176,6 +187,7 @@ const AddressMapPicker = ({ onLocationSelect, initialLocation }) => {
                     )}
                 </div>
             </div>
+        )}
 
             <div className="bg-cream/50 rounded-xl p-4 border border-cream-dark">
                 <p className="text-sm text-gray-700">
